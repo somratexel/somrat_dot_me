@@ -18,13 +18,18 @@ app.controller('Main', function($scope, $http, $routeParams) {
 	$http.get('wp-json/posts/').success(function(res){
 		$scope.posts = res;
 	});
+
+	$http.get(myLocalized.ajaxurl+'?action=get-theme-option-data').success(function(res){
+		console.log(res)
+	});
+	//console.log(myLocalized.ajaxurl);
 });
 
 app.controller('Content', function($scope, $http, $routeParams) {
 	$http.get('wp-json/posts/?filter[name]=' + $routeParams.slug).success(function(res){
-		console.log(res);
 		$scope.post = res[0];
 	});
+	
 });
 
 //searchForm Directive

@@ -146,13 +146,71 @@ function starter_scripts() {
 		'my-scripts',
 		'myLocalized',
 		array(
-			'partials' => trailingslashit( get_template_directory_uri() ) . 'partials/'
+			'partials' => trailingslashit( get_template_directory_uri() ) . 'partials/',
+			'ajaxurl'          => admin_url( 'admin-ajax.php' )
 			)
 	);
 
 }
 add_action( 'wp_enqueue_scripts', 'starter_scripts' );
 
+/**
+ * Get the bootstrap!
+ */
+if ( file_exists(  __DIR__ . '/inc/cmb2/init.php' ) ) {
+  require_once  __DIR__ . '/inc/cmb2/init.php';
+} elseif ( file_exists(  __DIR__ . '/inc/CMB2/init.php' ) ) {
+  require_once  __DIR__ . '/inc/CMB2/init.php';
+}
+
+/**
+ * Config the bootstrap
+ */
+
+if ( file_exists(  __DIR__ . '/inc/exela-app-bootstrap.php' ) ) {
+  require_once  __DIR__ . '/inc/exela-app-bootstrap.php';
+} 
 
 
+/**
+ * Adding portfolio meta data in json api
+ */
+add_filter( 'json_prepare_post', function ($data, $post, $context) {
+	global $cmb_portfolio;
+	$data['portfolio_meta_data'] = array(
+	    $cmb_portfolio.'meta_images' => get_post_meta( $post['ID'], $cmb_portfolio.'meta_images', true ),
+	    $cmb_portfolio.'meta_url' => get_post_meta( $post['ID'], $cmb_portfolio.'meta_url', true ),
+	);
+return $data;
+}, 10, 3 );
 
+add_action( 'wp_ajax_nopriv_get-theme-option-data', 'get_theme_option_data' );
+add_action( 'wp_ajax_get-theme-option-data', 'get_theme_option_data' );
+
+function get_theme_option_data(){
+	
+	$response = json_encode( array( 'success' => true, 'message' => 'custom message' ) );
+    // response output
+    print_r($response);
+    exit;
+}
+
+if ( file_exists(  __DIR__ . '/inc/exela-theme-options-api.php' ) ) {
+  require_once  __DIR__ . '/inc/exela-theme-options-api.php';
+} 
+
+
+if ( ! function_exists ( 'wp_json_theme_options_init' ) ) :
+
+	/**
+	 * Init JSON REST API Theme options routes
+	 */
+	function wp_json_theme_options_init() {
+
+		$class = new WP_JSON_ThemeOptions();
+		add_filter( 'json_endpoints', array( $class, 'register_routes' ) );
+
+	}
+	add_action( 'wp_json_server_before_serve', 'wp_json_theme_options_init' );
+
+endif;
