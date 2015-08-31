@@ -19,10 +19,10 @@ app.controller('Main', function($scope, $http, $routeParams) {
 		$scope.posts = res;
 	});
 
-	$http.get(myLocalized.ajaxurl+'?action=get-theme-option-data').success(function(res){
+	/*$http.get(myLocalized.ajaxurl+'?action=get-theme-option-data').success(function(res){
 		console.log(res)
-	});
-	//console.log(myLocalized.ajaxurl);
+	});*/
+
 });
 
 app.controller('Content', function($scope, $http, $routeParams) {

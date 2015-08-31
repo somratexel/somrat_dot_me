@@ -117,11 +117,14 @@ add_action( 'widgets_init', 'starter_widgets_init' );
  */
 function starter_scripts() {
 	
-	// Add Bootstrap used in the main stylesheet.
-	//wp_enqueue_style( 'bootstrap', get_template_directory_uri() . '/bootstrap-3.2.0/css/bootstrap.min.css', array(), '3.2.0' );
-	// Add Bootstrap js file.
-	//wp_enqueue_script( 'bootsrtap-script', get_template_directory_uri() . '/bootstrap-3.2.0/js/bootstrap.min.js', array( 'jquery' ), '20140616', true );
-	
+	//adding css files
+	wp_enqueue_style( 'bootstrap', get_template_directory_uri() . '/node_modules/bootstrap/dist/css/bootstrap.min.css', array(), '3.3.5' );
+	wp_enqueue_style( 'slick', get_template_directory_uri() . '/node_modules/slick/slick.css', array(), '1.5.7' );
+	wp_enqueue_style( 'slick-theme', get_template_directory_uri() . '/node_modules/slick/slick-theme.css', array(), '1.5.7' );
+	//adding js files
+	wp_enqueue_script( 'bootsrtap-script', get_template_directory_uri() . '/node_modules/bootstrap/dist/js/bootstrap.min.js', array( 'jquery' ), '3.3.5', true );
+	wp_enqueue_script( 'slick-script', get_template_directory_uri() . '/node_modules/slick/slick.min.js', array( 'jquery' ), '1.5.7', true );
+	wp_enqueue_script( 'custom', get_template_directory_uri() . '/js/custom.js', array( 'jquery' ), '1.0.0', true );
 	wp_enqueue_script(
 		'angularjs',
 		get_stylesheet_directory_uri() . '/node_modules/angular/angular.min.js'
@@ -184,7 +187,7 @@ add_filter( 'json_prepare_post', function ($data, $post, $context) {
 return $data;
 }, 10, 3 );
 
-add_action( 'wp_ajax_nopriv_get-theme-option-data', 'get_theme_option_data' );
+/*add_action( 'wp_ajax_nopriv_get-theme-option-data', 'get_theme_option_data' );
 add_action( 'wp_ajax_get-theme-option-data', 'get_theme_option_data' );
 
 function get_theme_option_data(){
@@ -193,7 +196,12 @@ function get_theme_option_data(){
     // response output
     print_r($response);
     exit;
-}
+}*/
+
+
+/**
+ * Getting theme options form rest api
+ */
 
 if ( file_exists(  __DIR__ . '/inc/exela-theme-options-api.php' ) ) {
   require_once  __DIR__ . '/inc/exela-theme-options-api.php';

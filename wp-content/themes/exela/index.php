@@ -15,8 +15,10 @@
  */
 
 get_header(); ?>
+	<div class="container">
 
-	<div ng-view></div>
+		<div ng-view></div>
+	</div>	
 
 <?php
 get_footer();
