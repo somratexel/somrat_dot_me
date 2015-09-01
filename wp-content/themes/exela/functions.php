@@ -124,10 +124,12 @@ function starter_scripts() {
 	wp_enqueue_style( 'bootstrap', get_template_directory_uri() . '/node_modules/bootstrap/dist/css/bootstrap.min.css', array(), '3.3.5' );
 	wp_enqueue_style( 'slick', get_template_directory_uri() . '/node_modules/slick/slick.css', array(), '1.5.7' );
 	wp_enqueue_style( 'slick-theme', get_template_directory_uri() . '/node_modules/slick/slick-theme.css', array(), '1.5.7' );
+	wp_enqueue_style( 'wow', get_template_directory_uri() . '/node_modules/wow/animate.css', array(), '1.1.2' );
 	wp_enqueue_style( 'exela-style', get_template_directory_uri() . '/style.css', array(), '1.0.0' );
 	//adding js files
 	wp_enqueue_script( 'bootsrtap-script', get_template_directory_uri() . '/node_modules/bootstrap/dist/js/bootstrap.min.js', array( 'jquery' ), '3.3.5', true );
 	wp_enqueue_script( 'slick-script', get_template_directory_uri() . '/node_modules/slick/slick.min.js', array( 'jquery' ), '1.5.7', true );
+	wp_enqueue_script( 'wow-script', get_template_directory_uri() . '/node_modules/wow/wow.min.js', array( 'jquery' ), '1.1.2', true );
 	wp_enqueue_script( 'custom', get_template_directory_uri() . '/js/custom.js', array( 'jquery' ), '1.0.0', true );
 	wp_enqueue_script(
 		'angularjs',

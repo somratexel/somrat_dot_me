@@ -9,62 +9,68 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="row menu-box-row">
-			<div class="col-md-4 col-sm-12 col-xs-12 menu-box no-padding-right">
-				<a style="background-color:#FF6501;" class="menu-link" ng-href="{{mainmenu[0].url}}">
+			<div ng-show="mainmenu[0]" class="col-md-4 col-sm-12 col-xs-12 menu-box no-padding-right wow pulse">
+				<a style="background-color:#F86D13;" class="menu-link" ng-href="{{mainmenu[0].url}}">
 					<i ng-class="mainmenu[0].classes">&nbsp;</i>
 					<span class="menu-title">{{mainmenu[0].title}}</span>
 				</a>
 			</div>
 		</div>
 		<div class="row menu-box-row">
-			<div class="col-md-2 col-sm-12 col-xs-12 menu-box no-padding-right">
-				<a style="background-color:#0164FF;" class="menu-link" href="#">
-					<i class="fa fa-user">&nbsp;</i>
-					<span class="menu-title">About Me</span>
+			<div ng-show="mainmenu[1]" class="col-md-2 col-sm-12 col-xs-12 menu-box no-padding-right wow bounce">
+				<a style="background-color:#0164FF;" class="menu-link" ng-href="{{mainmenu[1].url}}">
+					<i ng-class="mainmenu[1].classes">&nbsp;</i>
+					<span class="menu-title">{{mainmenu[1].title}}</span>
 				</a>
 			</div>
-			<div class="col-md-2 col-sm-12 col-xs-12 menu-box no-padding-right">
-				<a style="background-color:#32CB32;" class="menu-link" href="#">
-					<i class="fa fa-user">&nbsp;</i>
-					<span class="menu-title">About Me</span>
+			<div ng-show="mainmenu[2]" class="col-md-2 col-sm-12 col-xs-12 menu-box no-padding-right wow pulse">
+				<a style="background-color:#32CB32;" class="menu-link" ng-href="{{mainmenu[2].url}}">
+					<i ng-class="mainmenu[2].classes">&nbsp;</i>
+					<span class="menu-title">{{mainmenu[2].title}}</span>
 				</a>
 			</div>
-			<div class="col-md-4 col-sm-12 col-xs-12 menu-box no-padding-right">
-				<a style="background-color:#CC3200;" class="menu-link" href="#">
-					<i class="fa fa-user">&nbsp;</i>
-					<span class="menu-title">About Me</span>
+			<div ng-show="mainmenu[3]" class="col-md-3 col-sm-12 col-xs-12 menu-box no-padding-right wow bounce">
+				<a style="background-color:#CC3200;" class="menu-link" ng-href="{{mainmenu[3].url}}">
+					<i ng-class="mainmenu[3].classes">&nbsp;</i>
+					<span class="menu-title">{{mainmenu[3].title}}</span>
 				</a>
 			</div>
-			<div class="col-md-4 col-sm-12 col-xs-12 menu-box">
-				<a style="background-color:#326698;" class="menu-link" href="#">
-					<i class="fa fa-user">&nbsp;</i>
-					<span class="menu-title">About Me</span>
+			<div ng-show="mainmenu[4]" class="col-md-3 col-sm-12 col-xs-12 menu-box wow pulse">
+				<a style="background-color:#326698;" class="menu-link" ng-href="{{mainmenu[4].url}}">
+					<i ng-class="mainmenu[4].classes">&nbsp;</i>
+					<span class="menu-title">{{mainmenu[4].title}}</span>
 				</a>
 			</div>
 		</div>
 		<div class="row menu-box-row">
-			<div class="col-md-4 col-sm-12 col-xs-12 menu-box no-padding-right">
-				<a style="background-color:#990098;" class="menu-link" href="#">
-					<i class="fa fa-user">&nbsp;</i>
-					<span class="menu-title">About Me</span>
+			<div ng-show="mainmenu[5]" class="col-md-4 col-sm-12 col-xs-12 menu-box no-padding-right wow bounce">
+				<a style="background-color:#990098;" class="menu-link" ng-href="{{mainmenu[5].url}}">
+					<i ng-class="mainmenu[5].classes">&nbsp;</i>
+					<span class="menu-title">{{mainmenu[5].title}}</span>
 				</a>
 			</div>
-			<div class="col-md-2 col-sm-12 col-xs-12 menu-box no-padding-right">
-				<a style="background-color:#FF009A;" class="menu-link" href="#">
-					<i class="fa fa-user">&nbsp;</i>
-					<span class="menu-title">About Me</span>
+			<div ng-show="mainmenu[6]" class="col-md-2 col-sm-12 col-xs-12 menu-box no-padding-right wow pulse">
+				<a style="background-color:#3A5795;" class="menu-link" ng-href="{{mainmenu[6].url}}">
+					<i ng-class="mainmenu[6].classes">&nbsp;</i>
+					<span class="menu-title">{{mainmenu[6].title}}</span>
 				</a>
 			</div>
-			<div class="col-md-2 col-sm-12 col-xs-12 menu-box no-padding-right">
-				<a style="background-color:#3233CC;" class="menu-link" href="#">
-					<i class="fa fa-user">&nbsp;</i>
-					<span class="menu-title">About Me</span>
+			<div ng-show="mainmenu[7]" class="col-md-2 col-sm-12 col-xs-12 menu-box no-padding-right wow bounce">
+				<a style="background-color:#55ACEE;" class="menu-link" ng-href="{{mainmenu[7].url}}">
+					<i ng-class="mainmenu[7].classes">&nbsp;</i>
+					<span class="menu-title">{{mainmenu[7].title}}</span>
 				</a>
 			</div>
-			<div class="col-md-4 col-sm-12 col-xs-12 menu-box">
-				<a style="background-color:#FF6501;" class="menu-link" href="#">
-					<i class="fa fa-user">&nbsp;</i>
-					<span class="menu-title">About Me</span>
+			<div ng-show="mainmenu[8]" class="col-md-2 col-sm-12 col-xs-12 no-padding-right menu-box wow pulse">
+				<a style="background-color:#55ACEE;" class="menu-link" ng-href="{{mainmenu[8].url}}">
+					<i ng-class="mainmenu[8].classes">&nbsp;</i>
+					<span class="menu-title">{{mainmenu[8].title}}</span>
+				</a>
+			</div>
+			<div ng-show="mainmenu[9]" class="col-md-2 col-sm-12 col-xs-12 menu-box wow bounce">
+				<a style="background-color:#333333;" class="menu-link" ng-href="{{mainmenu[9].url}}">
+					<i ng-class="mainmenu[9].classes">&nbsp;</i>
+					<span class="menu-title">{{mainmenu[9].title}}</span>
 				</a>
 			</div>
 		</div>

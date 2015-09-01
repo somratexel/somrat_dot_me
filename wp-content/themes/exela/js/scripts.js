@@ -8,9 +8,13 @@ app.config(function($routeProvider, $locationProvider) {
 		templateUrl: myLocalized.partials + 'home.html',
 		controller: 'homeCtrl'
 	})
+	.when('/category/:portfolio', {
+		templateUrl: myLocalized.partials + 'portfolio.html',
+		controller: 'portfolioCtrl'
+	})
 	.when('/:slug', {
-		templateUrl: myLocalized.partials + 'content.html',
-		controller: 'Content'
+		templateUrl: myLocalized.partials + 'page.html',
+		controller: 'pageCtrl'
 	});
 })
 
@@ -55,10 +59,23 @@ app.controller('homeCtrl', function($scope, $http, $routeParams) {
 
 });
 
-app.controller('Content', function($scope, $http, $routeParams) {
-	$http.get('wp-json/posts/?filter[name]=' + $routeParams.slug).success(function(res){
-		$scope.post = res[0];
+app.controller('pageCtrl', function($scope, $http, $routeParams) {
+	$scope.pageData = {};
+	$http.get('wp-json/pages/' + $routeParams.slug).success(function(res, status, headers){
+		$scope.page.title = res.title;
+		$scope.pageData.title = res.title;
+		$scope.pageData.content = res.content;
 	});
+	
+});
+
+app.controller('portfolioCtrl', function($scope, $http, $routeParams) {
+	$scope.pageData = {};
+	/*$http.get('wp-json/pages/' + $routeParams.portfolio).success(function(res, status, headers){
+		$scope.page.title = res.title;
+		$scope.pageData.title = res.title;
+		$scope.pageData.content = res.content;
+	});*/
 	
 });
 

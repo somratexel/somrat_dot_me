@@ -20,7 +20,8 @@ get_header(); ?>
 		<div class="row">
 			<div class="col-md-12 header">
 				<div class="row">
-					<div class="col-md-2 logo-container">
+					<div class="col-md-2 logo-container no-padding-right wow fadeInDown">
+						<a href="<?php echo site_url(); ?>">
 						<?php 
 							if ( function_exists( 'ot_get_option' ) ) {
 
@@ -32,9 +33,9 @@ get_header(); ?>
 							  
 							}
 						?>
-						
+						</a>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-4 wow fadeInRight">
 						<h1 class="site-title"><?php bloginfo('name'); ?></h1>
 						<p><?php bloginfo('description'); ?></p>
 					</div>
