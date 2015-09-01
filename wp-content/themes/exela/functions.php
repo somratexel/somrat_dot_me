@@ -117,10 +117,14 @@ add_action( 'widgets_init', 'starter_widgets_init' );
  */
 function starter_scripts() {
 	
+	//adding fonts
+	wp_enqueue_style( 'roboto', 'https://fonts.googleapis.com/css?family=Oswald', array(), '1.0.0' );
+	wp_enqueue_style( 'font-awesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css', array(), '4.4.0' );
 	//adding css files
 	wp_enqueue_style( 'bootstrap', get_template_directory_uri() . '/node_modules/bootstrap/dist/css/bootstrap.min.css', array(), '3.3.5' );
 	wp_enqueue_style( 'slick', get_template_directory_uri() . '/node_modules/slick/slick.css', array(), '1.5.7' );
 	wp_enqueue_style( 'slick-theme', get_template_directory_uri() . '/node_modules/slick/slick-theme.css', array(), '1.5.7' );
+	wp_enqueue_style( 'exela-style', get_template_directory_uri() . '/style.css', array(), '1.0.0' );
 	//adding js files
 	wp_enqueue_script( 'bootsrtap-script', get_template_directory_uri() . '/node_modules/bootstrap/dist/js/bootstrap.min.js', array( 'jquery' ), '3.3.5', true );
 	wp_enqueue_script( 'slick-script', get_template_directory_uri() . '/node_modules/slick/slick.min.js', array( 'jquery' ), '1.5.7', true );
@@ -222,3 +226,8 @@ if ( ! function_exists ( 'wp_json_theme_options_init' ) ) :
 	add_action( 'wp_json_server_before_serve', 'wp_json_theme_options_init' );
 
 endif;
+
+/**
+* Hide admin bar from front end
+**/
+show_admin_bar( false );

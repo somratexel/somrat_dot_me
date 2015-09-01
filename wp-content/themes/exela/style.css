@@ -17,3 +17,83 @@ Tags: bootstrap, starter, developer
  * 1.0 - Starting
  * -----------------------------------------------------------------------------
  */
+
+body{
+	/*font-family: "Roboto","arial";*/
+	font-family: 'Oswald', sans-serif;
+	color: #000;
+}
+
+.bg-slider-container{
+	    bottom: 0;
+	    height: 100%;
+	    left: 0;
+	    position: fixed;
+	    right: 0;
+	    top: 0;
+	    z-index: 0;
+	    opacity: 0.7;
+}
+.overlay{
+	z-index: 1;
+	background-color: rgba(0,0,0,0.7);
+	position: absolute;
+	min-height: 100%;
+	height: auto;
+	width: 100%;
+}
+#main-container{
+	position: relative;
+	background-color: rgba(255,255,255,0.7);
+	min-height: 100%;
+	height: auto;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+.header{
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+.logo-container{
+
+}
+.logo{
+	/*border: 1px solid #f9f9f9;*/
+}
+.site-title{
+	
+}
+
+/*home page starts*/
+.menu-box-row{
+	
+}
+.menu-box{
+	margin-bottom: 15px;
+	float: left;
+}
+.no-padding-right{
+	padding-right: 0;
+}
+.menu-link{
+	width: 100%;
+    height: 150px;
+    float: left;
+    color: #f9f9f9;
+    font-size: 30px;
+    text-align: center;
+}
+.menu-link:hover{
+	color: #fff;
+	text-decoration: none;
+}
+.menu-link i{
+	margin-top: 30px;
+    font-size: 50px;
+}
+.menu-title{
+	width: 100%;
+	float: left;
+}
+
+/*home page ends*/

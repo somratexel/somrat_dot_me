@@ -5,8 +5,8 @@ app.config(function($routeProvider, $locationProvider) {
 
 	$routeProvider
 	.when('/', {
-		templateUrl: myLocalized.partials + 'main.html',
-		controller: 'Main'
+		templateUrl: myLocalized.partials + 'home.html',
+		controller: 'homeCtrl'
 	})
 	.when('/:slug', {
 		templateUrl: myLocalized.partials + 'content.html',
@@ -14,10 +14,40 @@ app.config(function($routeProvider, $locationProvider) {
 	});
 })
 
-app.controller('Main', function($scope, $http, $routeParams) {
+app.controller('mainCtrl', function($scope, $http, $routeParams, dataService) {
+	$scope.page={
+		 parent:'Home',
+		 subpage:'',
+		 type:'',
+		 title:''
+	}
+	$scope.mainmenu  = '';
+
+	/*var exelaMainMenu = localStorage.getItem('exelaMainMenu');
+	if(exelaMainMenu && exelaMainMenu.length>0){
+		$scope.mainmenu  = JSON.parse(exelaMainMenu);
+	}else{
+		$http.get('wp-json/menu-locations/primary').success(function(res){
+			$scope.mainmenu =  res;
+			setStorage('exelaMainMenu', JSON.stringify($scope.mainmenu)); 
+		});
+		
+	}*/
+
+	$scope.mainmenu = dataService.mainmenu(function(data){
+		$scope.mainmenu =  data;
+		setStorage('exelaMainMenu', JSON.stringify($scope.mainmenu));  
+	})
+	
+
+});
+
+app.controller('homeCtrl', function($scope, $http, $routeParams) {
+	$scope.page.title = 'Home';
 	$http.get('wp-json/posts/').success(function(res){
 		$scope.posts = res;
 	});
+
 
 	/*$http.get(myLocalized.ajaxurl+'?action=get-theme-option-data').success(function(res){
 		console.log(res)
@@ -48,4 +78,19 @@ app.directive('searchForm', function() {
 			};
 		}]
 	};
+});
+
+app.service('dataService', function($http) {
+	this.mainmenu=function(callback){
+		var data = localStorage.getItem('exelaMainMenu');
+		if(data && data.length>0){
+			data = JSON.parse(data);
+			return data;
+		}else{
+		  	return $http.get('wp-json/menu-locations/primary').success(callback);			
+		}
+			
+	};
+
+
 });

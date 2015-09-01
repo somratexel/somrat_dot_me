@@ -15,8 +15,32 @@
  */
 
 get_header(); ?>
-	<div class="container">
 
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-md-12 header">
+				<div class="row">
+					<div class="col-md-2 logo-container">
+						<?php 
+							if ( function_exists( 'ot_get_option' ) ) {
+
+							  $logo = ot_get_option( 'logo', '');
+							  
+							  if ( ! empty( $logo ) ) {
+							  	echo '<img width="100%" height="auto" class="logo img-responsive" src="'.$logo.'" alt="Logo">';
+							  }
+							  
+							}
+						?>
+						
+					</div>
+					<div class="col-md-4">
+						<h1 class="site-title"><?php bloginfo('name'); ?></h1>
+						<p><?php bloginfo('description'); ?></p>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div ng-view></div>
 	</div>	
 
