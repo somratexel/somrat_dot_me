@@ -16,7 +16,7 @@
 
 get_header(); ?>
 
-	<div id="main-container" class="container">
+	
 		<div class="row">
 			<div class="col-md-12 header">
 				<div class="row">
@@ -39,11 +39,26 @@ get_header(); ?>
 						<h1 class="site-title"><?php bloginfo('name'); ?></h1>
 						<p><?php bloginfo('description'); ?></p>
 					</div>
+					<div class="col-md-6 wow bounce">
+						<div class="top-search-container">
+							<input placeholder="Search in site" class="top-search" type="text" name="s">
+							<button class="search-btn" type="submit"><i class="fa fa-search">&nbsp;</i></button>
+						</div>
+						<div class="top-navigation-container">
+							<ul class="top-manu-list">
+								<li class="top-menu-item" ng-repeat="item in topMenu">
+									<a ng-click="set_active($index)"  ng-class="{active: currentLocation.url==item.url}" class="top-menu-link" title="{{item.title}}" ng-href="{{item.url}}">
+										<i ng-class="item.classes">&nbsp;</i>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 		<div ng-view></div>
-	</div>	
+	
 
 <?php
 get_footer();

@@ -47,3 +47,4 @@
 </div>
 
 <div class="overlay">
+	<div id="main-container" class="container">

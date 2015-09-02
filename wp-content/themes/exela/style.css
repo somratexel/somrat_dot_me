@@ -17,11 +17,19 @@ Tags: bootstrap, starter, developer
  * 1.0 - Starting
  * -----------------------------------------------------------------------------
  */
-
+html{
+	overflow-y:scroll; 
+}
 body{
 	/*font-family: "Roboto","arial";*/
 	font-family: 'Oswald', sans-serif;
 	color: #000;
+}
+
+a:focus, a:hover{
+	text-decoration: none;
+	outline: none;
+	color: inherit;
 }
 
 .bg-slider-container{
@@ -63,6 +71,66 @@ body{
 .site-title{
 	
 }
+.top-search-container{
+	float: right;
+}
+.top-search{
+	float: left;
+    height: 40px;
+    width: 300px;
+    padding: 0 10px;
+    border: none;
+    background-color: rgba(255,255,255,0.5);
+}
+.search-btn{
+	float: right;
+    border: none;
+    height: 40px;
+    padding: 0px;
+    margin: 0;
+    font-size: 20px;
+    width: 50px;
+    text-align: center;
+    background-color: #3F6E9B;
+    color: #fff;
+}
+.top-navigation-container{
+	float: right;
+	width: 100%;
+	text-align: right;
+	margin-top: 10px;
+}
+.top-manu-list{
+	list-style: none;
+	padding: 0;
+}
+.top-menu-item{
+	display: inline;
+	margin-left: 5px; 
+}
+.top-menu-link{
+	color: #ddd;
+    font-size: 30px;
+    text-align: right;
+    padding-left: 10px;
+}
+.top-menu-item .active{
+	color: #000;
+}
+.top-menu-link:hover{
+	text-decoration: none;
+	color: #000;
+}
+.copyright-container{
+	position: relative;
+	background-color: rgba(255,255,255,0.6);
+	margin-top: -14px;
+	margin-bottom: 15px;
+}
+.copyright p{
+	margin: 0;
+	padding: 5px 0;
+}
 
 /*home page starts*/
 .menu-box-row{
@@ -99,3 +167,14 @@ body{
 }
 
 /*home page ends*/
+
+/*portfolio starts*/
+.portfolio-item{
+	height: 300px;
+	margin-bottom: 15px;
+	overflow: hidden;
+}
+.portfolio-list .no-padding-right:nth-child(3n){
+	padding-right:15px;
+}
+/*portfolio ends*/

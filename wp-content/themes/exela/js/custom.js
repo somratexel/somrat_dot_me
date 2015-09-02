@@ -26,7 +26,7 @@
 	function resize(){
 		var window_height = parseInt($(window).height());
 
-		$('#main-container').css('min-height',(window_height-30)+'px');
+		$('#main-container').css('min-height',(window_height-62)+'px');
 	}
  
 })(jQuery);
