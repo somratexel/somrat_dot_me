@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.11
+-- version 4.0.4
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 02, 2015 at 01:21 PM
--- Server version: 5.6.21
--- PHP Version: 5.6.3
+-- Generation Time: Sep 02, 2015 at 08:11 PM
+-- Server version: 5.5.32
+-- PHP Version: 5.4.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `somrat_dot_me`
 --
+CREATE DATABASE IF NOT EXISTS `somrat_dot_me` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `somrat_dot_me`;
 
 -- --------------------------------------------------------
 
@@ -27,11 +29,14 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `sdm_commentmeta` (
-`meta_id` bigint(20) unsigned NOT NULL,
+  `meta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `comment_id` bigint(20) unsigned NOT NULL DEFAULT '0',
   `meta_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `meta_value` longtext COLLATE utf8mb4_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `meta_value` longtext COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`meta_id`),
+  KEY `comment_id` (`comment_id`),
+  KEY `meta_key` (`meta_key`(191))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -40,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `sdm_commentmeta` (
 --
 
 CREATE TABLE IF NOT EXISTS `sdm_comments` (
-`comment_ID` bigint(20) unsigned NOT NULL,
+  `comment_ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `comment_post_ID` bigint(20) unsigned NOT NULL DEFAULT '0',
   `comment_author` tinytext COLLATE utf8mb4_unicode_ci NOT NULL,
   `comment_author_email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
@@ -54,8 +59,14 @@ CREATE TABLE IF NOT EXISTS `sdm_comments` (
   `comment_agent` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `comment_type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `comment_parent` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`comment_ID`),
+  KEY `comment_post_ID` (`comment_post_ID`),
+  KEY `comment_approved_date_gmt` (`comment_approved`,`comment_date_gmt`),
+  KEY `comment_date_gmt` (`comment_date_gmt`),
+  KEY `comment_parent` (`comment_parent`),
+  KEY `comment_author_email` (`comment_author_email`(10))
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `sdm_comments`
@@ -71,7 +82,7 @@ INSERT INTO `sdm_comments` (`comment_ID`, `comment_post_ID`, `comment_author`, `
 --
 
 CREATE TABLE IF NOT EXISTS `sdm_links` (
-`link_id` bigint(20) unsigned NOT NULL,
+  `link_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `link_url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `link_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `link_image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
@@ -83,8 +94,10 @@ CREATE TABLE IF NOT EXISTS `sdm_links` (
   `link_updated` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `link_rel` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `link_notes` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `link_rss` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `link_rss` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (`link_id`),
+  KEY `link_visible` (`link_visible`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -93,19 +106,21 @@ CREATE TABLE IF NOT EXISTS `sdm_links` (
 --
 
 CREATE TABLE IF NOT EXISTS `sdm_options` (
-`option_id` bigint(20) unsigned NOT NULL,
+  `option_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `option_name` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `option_value` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `autoload` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'yes'
-) ENGINE=InnoDB AUTO_INCREMENT=301 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `autoload` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'yes',
+  PRIMARY KEY (`option_id`),
+  UNIQUE KEY `option_name` (`option_name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=310 ;
 
 --
 -- Dumping data for table `sdm_options`
 --
 
 INSERT INTO `sdm_options` (`option_id`, `option_name`, `option_value`, `autoload`) VALUES
-(1, 'siteurl', 'http://localhost:8080/somrat_dot_me', 'yes'),
-(2, 'home', 'http://localhost:8080/somrat_dot_me', 'yes'),
+(1, 'siteurl', 'http://localhost/somrat_dot_me', 'yes'),
+(2, 'home', 'http://localhost/somrat_dot_me', 'yes'),
 (3, 'blogname', 'SITE TITLE', 'yes'),
 (4, 'blogdescription', 'Just another WordPress site with Angular Js t also the leap into electronic typesetting, remaining essentially unchanged', 'yes'),
 (5, 'users_can_register', '0', 'yes'),
@@ -170,7 +185,7 @@ INSERT INTO `sdm_options` (`option_id`, `option_name`, `option_value`, `autoload
 (64, 'avatar_default', 'mystery', 'yes'),
 (65, 'large_size_w', '1024', 'yes'),
 (66, 'large_size_h', '1024', 'yes'),
-(67, 'image_default_link_type', 'file', 'yes'),
+(67, 'image_default_link_type', '', 'yes'),
 (68, 'image_default_size', '', 'yes'),
 (69, 'image_default_align', '', 'yes'),
 (70, 'close_comments_for_old_posts', '0', 'yes'),
@@ -204,7 +219,7 @@ INSERT INTO `sdm_options` (`option_id`, `option_name`, `option_value`, `autoload
 (102, '_site_transient_update_core', 'O:8:"stdClass":4:{s:7:"updates";a:1:{i:0;O:8:"stdClass":10:{s:8:"response";s:6:"latest";s:8:"download";s:57:"https://downloads.wordpress.org/release/wordpress-4.3.zip";s:6:"locale";s:5:"en_US";s:8:"packages";O:8:"stdClass":5:{s:4:"full";s:57:"https://downloads.wordpress.org/release/wordpress-4.3.zip";s:10:"no_content";s:68:"https://downloads.wordpress.org/release/wordpress-4.3-no-content.zip";s:11:"new_bundled";s:69:"https://downloads.wordpress.org/release/wordpress-4.3-new-bundled.zip";s:7:"partial";b:0;s:8:"rollback";b:0;}s:7:"current";s:3:"4.3";s:7:"version";s:3:"4.3";s:11:"php_version";s:5:"5.2.4";s:13:"mysql_version";s:3:"5.0";s:11:"new_bundled";s:3:"4.1";s:15:"partial_version";s:0:"";}}s:12:"last_checked";i:1441180701;s:15:"version_checked";s:3:"4.3";s:12:"translations";a:0:{}}', 'yes'),
 (104, '_site_transient_update_plugins', 'O:8:"stdClass":4:{s:12:"last_checked";i:1441180702;s:8:"response";a:0:{}s:12:"translations";a:0:{}s:9:"no_update";a:5:{s:19:"akismet/akismet.php";O:8:"stdClass":6:{s:2:"id";s:2:"15";s:4:"slug";s:7:"akismet";s:6:"plugin";s:19:"akismet/akismet.php";s:11:"new_version";s:5:"3.1.3";s:3:"url";s:38:"https://wordpress.org/plugins/akismet/";s:7:"package";s:56:"https://downloads.wordpress.org/plugin/akismet.3.1.3.zip";}s:9:"hello.php";O:8:"stdClass":6:{s:2:"id";s:4:"3564";s:4:"slug";s:11:"hello-dolly";s:6:"plugin";s:9:"hello.php";s:11:"new_version";s:3:"1.6";s:3:"url";s:42:"https://wordpress.org/plugins/hello-dolly/";s:7:"package";s:58:"https://downloads.wordpress.org/plugin/hello-dolly.1.6.zip";}s:23:"wp-api-menus/plugin.php";O:8:"stdClass":6:{s:2:"id";s:5:"56906";s:4:"slug";s:12:"wp-api-menus";s:6:"plugin";s:23:"wp-api-menus/plugin.php";s:11:"new_version";s:5:"1.1.5";s:3:"url";s:43:"https://wordpress.org/plugins/wp-api-menus/";s:7:"package";s:61:"https://downloads.wordpress.org/plugin/wp-api-menus.1.1.5.zip";}s:25:"option-tree/ot-loader.php";O:8:"stdClass":6:{s:2:"id";s:5:"13921";s:4:"slug";s:11:"option-tree";s:6:"plugin";s:25:"option-tree/ot-loader.php";s:11:"new_version";s:5:"2.5.5";s:3:"url";s:42:"https://wordpress.org/plugins/option-tree/";s:7:"package";s:60:"https://downloads.wordpress.org/plugin/option-tree.2.5.5.zip";}s:24:"json-rest-api/plugin.php";O:8:"stdClass":6:{s:2:"id";s:5:"42054";s:4:"slug";s:13:"json-rest-api";s:6:"plugin";s:24:"json-rest-api/plugin.php";s:11:"new_version";s:5:"1.2.3";s:3:"url";s:44:"https://wordpress.org/plugins/json-rest-api/";s:7:"package";s:62:"https://downloads.wordpress.org/plugin/json-rest-api.1.2.3.zip";}}}', 'yes'),
 (107, '_site_transient_update_themes', 'O:8:"stdClass":4:{s:12:"last_checked";i:1441180702;s:7:"checked";a:5:{s:5:"exela";s:3:"1.0";s:6:"ngdemo";s:3:"1.0";s:13:"twentyfifteen";s:3:"1.3";s:14:"twentyfourteen";s:3:"1.5";s:14:"twentythirteen";s:3:"1.6";}s:8:"response";a:0:{}s:12:"translations";a:0:{}}', 'yes'),
-(108, '_transient_random_seed', '8b553ab1f161c2f8399cee22c59c2baf', 'yes'),
+(108, '_transient_random_seed', 'f50fb0ff536eaac7e93791bd48621293', 'yes'),
 (109, '_site_transient_timeout_browser_229c156fb8caef6704dc9bd068964647', '1441521883', 'yes'),
 (110, '_site_transient_browser_229c156fb8caef6704dc9bd068964647', 'a:9:{s:8:"platform";s:7:"Windows";s:4:"name";s:6:"Chrome";s:7:"version";s:13:"44.0.2403.157";s:10:"update_url";s:28:"http://www.google.com/chrome";s:7:"img_src";s:49:"http://s.wordpress.org/images/browsers/chrome.png";s:11:"img_src_ssl";s:48:"https://wordpress.org/images/browsers/chrome.png";s:15:"current_version";s:2:"18";s:7:"upgrade";b:0;s:8:"insecure";b:0;}', 'yes'),
 (112, 'can_compress_scripts', '1', 'yes'),
@@ -223,7 +238,7 @@ INSERT INTO `sdm_options` (`option_id`, `option_name`, `option_value`, `autoload
 (188, 'widget_pages', 'a:2:{i:1;a:0:{}s:12:"_multiwidget";i:1;}', 'yes'),
 (190, 'widget_tag_cloud', 'a:2:{i:1;a:0:{}s:12:"_multiwidget";i:1;}', 'yes'),
 (192, 'option_tree_settings', 'a:3:{s:8:"sections";a:1:{i:0;a:2:{s:5:"title";s:7:"General";s:2:"id";s:7:"general";}}s:8:"settings";a:3:{i:0;a:13:{s:5:"label";s:17:"Background Slider";s:2:"id";s:17:"background_slider";s:4:"type";s:6:"slider";s:4:"desc";s:0:"";s:3:"std";s:0:"";s:4:"rows";s:0:"";s:9:"post_type";s:0:"";s:8:"taxonomy";s:0:"";s:12:"min_max_step";s:0:"";s:5:"class";s:0:"";s:9:"condition";s:0:"";s:8:"operator";s:3:"and";s:7:"section";s:7:"general";}i:1;a:13:{s:5:"label";s:4:"Logo";s:2:"id";s:4:"logo";s:4:"type";s:6:"upload";s:4:"desc";s:0:"";s:3:"std";s:0:"";s:4:"rows";s:0:"";s:9:"post_type";s:0:"";s:8:"taxonomy";s:0:"";s:12:"min_max_step";s:0:"";s:5:"class";s:0:"";s:9:"condition";s:0:"";s:8:"operator";s:3:"and";s:7:"section";s:7:"general";}i:2;a:13:{s:5:"label";s:14:"Copyright Text";s:2:"id";s:14:"copyright_text";s:4:"type";s:4:"text";s:4:"desc";s:0:"";s:3:"std";s:0:"";s:4:"rows";s:0:"";s:9:"post_type";s:0:"";s:8:"taxonomy";s:0:"";s:12:"min_max_step";s:0:"";s:5:"class";s:0:"";s:9:"condition";s:0:"";s:8:"operator";s:3:"and";s:7:"section";s:7:"general";}}s:15:"contextual_help";a:1:{s:7:"sidebar";s:0:"";}}', 'yes'),
-(193, 'option_tree', 'a:3:{s:17:"background_slider";a:3:{i:0;a:4:{s:5:"title";s:0:"";s:5:"image";s:89:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/Wordpress-Splash-Image.png";s:4:"link";s:0:"";s:11:"description";s:0:"";}i:1;a:4:{s:5:"title";s:0:"";s:5:"image";s:73:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/jquery.png";s:4:"link";s:0:"";s:11:"description";s:0:"";}i:2;a:4:{s:5:"title";s:0:"";s:5:"image";s:87:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/angular-js-images-10.jpg";s:4:"link";s:0:"";s:11:"description";s:0:"";}}s:4:"logo";s:104:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/photodune-1523200-butterfly-m-920x780.jpg";s:14:"copyright_text";s:23:"Copyright © SITE TITLE";}', 'yes'),
+(193, 'option_tree', 'a:3:{s:17:"background_slider";a:3:{i:0;a:4:{s:5:"title";s:0:"";s:5:"image";s:84:"http://localhost/somrat_dot_me/wp-content/uploads/2015/08/Wordpress-Splash-Image.png";s:4:"link";s:0:"";s:11:"description";s:0:"";}i:1;a:4:{s:5:"title";s:0:"";s:5:"image";s:68:"http://localhost/somrat_dot_me/wp-content/uploads/2015/08/jquery.png";s:4:"link";s:0:"";s:11:"description";s:0:"";}i:2;a:4:{s:5:"title";s:0:"";s:5:"image";s:82:"http://localhost/somrat_dot_me/wp-content/uploads/2015/08/angular-js-images-10.jpg";s:4:"link";s:0:"";s:11:"description";s:0:"";}}s:4:"logo";s:95:"http://localhost/somrat_dot_me/wp-content/uploads/2015/08/522698_3806913229644_1672316026_n.jpg";s:14:"copyright_text";s:26:"&copy; All rights reserved";}', 'yes'),
 (194, 'ot_media_post_ID', '23', 'yes'),
 (222, '_site_transient_timeout_available_translations', '1441098431', 'yes'),
 (223, '_site_transient_available_translations', 'a:63:{s:2:"ar";a:8:{s:8:"language";s:2:"ar";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-18 00:32:07";s:12:"english_name";s:6:"Arabic";s:11:"native_name";s:14:"العربية";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/ar.zip";s:3:"iso";a:2:{i:1;s:2:"ar";i:2;s:3:"ara";}s:7:"strings";a:1:{s:8:"continue";s:16:"المتابعة";}}s:2:"az";a:8:{s:8:"language";s:2:"az";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-27 19:48:02";s:12:"english_name";s:11:"Azerbaijani";s:11:"native_name";s:16:"Azərbaycan dili";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/az.zip";s:3:"iso";a:2:{i:1;s:2:"az";i:2;s:3:"aze";}s:7:"strings";a:1:{s:8:"continue";s:5:"Davam";}}s:5:"bg_BG";a:8:{s:8:"language";s:5:"bg_BG";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-17 19:15:29";s:12:"english_name";s:9:"Bulgarian";s:11:"native_name";s:18:"Български";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/bg_BG.zip";s:3:"iso";a:2:{i:1;s:2:"bg";i:2;s:3:"bul";}s:7:"strings";a:1:{s:8:"continue";s:22:"Продължение";}}s:5:"bn_BD";a:8:{s:8:"language";s:5:"bn_BD";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-20 08:45:05";s:12:"english_name";s:7:"Bengali";s:11:"native_name";s:15:"বাংলা";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/bn_BD.zip";s:3:"iso";a:1:{i:1;s:2:"bn";}s:7:"strings";a:1:{s:8:"continue";s:23:"এগিয়ে চল.";}}s:5:"bs_BA";a:8:{s:8:"language";s:5:"bs_BA";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-18 21:20:44";s:12:"english_name";s:7:"Bosnian";s:11:"native_name";s:8:"Bosanski";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/bs_BA.zip";s:3:"iso";a:2:{i:1;s:2:"bs";i:2;s:3:"bos";}s:7:"strings";a:1:{s:8:"continue";s:7:"Nastavi";}}s:2:"ca";a:8:{s:8:"language";s:2:"ca";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-18 04:19:00";s:12:"english_name";s:7:"Catalan";s:11:"native_name";s:7:"Català";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/ca.zip";s:3:"iso";a:2:{i:1;s:2:"ca";i:2;s:3:"cat";}s:7:"strings";a:1:{s:8:"continue";s:8:"Continua";}}s:2:"cy";a:8:{s:8:"language";s:2:"cy";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-19 09:17:13";s:12:"english_name";s:5:"Welsh";s:11:"native_name";s:7:"Cymraeg";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/cy.zip";s:3:"iso";a:2:{i:1;s:2:"cy";i:2;s:3:"cym";}s:7:"strings";a:1:{s:8:"continue";s:6:"Parhau";}}s:5:"da_DK";a:8:{s:8:"language";s:5:"da_DK";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-18 19:34:34";s:12:"english_name";s:6:"Danish";s:11:"native_name";s:5:"Dansk";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/da_DK.zip";s:3:"iso";a:2:{i:1;s:2:"da";i:2;s:3:"dan";}s:7:"strings";a:1:{s:8:"continue";s:12:"Forts&#230;t";}}s:12:"de_DE_formal";a:8:{s:8:"language";s:12:"de_DE_formal";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-31 15:29:11";s:12:"english_name";s:15:"German (Formal)";s:11:"native_name";s:13:"Deutsch (Sie)";s:7:"package";s:69:"https://downloads.wordpress.org/translation/core/4.3/de_DE_formal.zip";s:3:"iso";a:1:{i:1;s:2:"de";}s:7:"strings";a:1:{s:8:"continue";s:10:"Fortfahren";}}s:5:"de_CH";a:8:{s:8:"language";s:5:"de_CH";s:7:"version";s:5:"4.2.4";s:7:"updated";s:19:"2015-08-12 10:52:32";s:12:"english_name";s:20:"German (Switzerland)";s:11:"native_name";s:17:"Deutsch (Schweiz)";s:7:"package";s:64:"https://downloads.wordpress.org/translation/core/4.2.4/de_CH.zip";s:3:"iso";a:1:{i:1;s:2:"de";}s:7:"strings";a:1:{s:8:"continue";s:10:"Fortfahren";}}s:5:"de_DE";a:8:{s:8:"language";s:5:"de_DE";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-31 15:22:04";s:12:"english_name";s:6:"German";s:11:"native_name";s:7:"Deutsch";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/de_DE.zip";s:3:"iso";a:1:{i:1;s:2:"de";}s:7:"strings";a:1:{s:8:"continue";s:10:"Fortfahren";}}s:2:"el";a:8:{s:8:"language";s:2:"el";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-19 16:32:48";s:12:"english_name";s:5:"Greek";s:11:"native_name";s:16:"Ελληνικά";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/el.zip";s:3:"iso";a:2:{i:1;s:2:"el";i:2;s:3:"ell";}s:7:"strings";a:1:{s:8:"continue";s:16:"Συνέχεια";}}s:5:"en_CA";a:8:{s:8:"language";s:5:"en_CA";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-14 00:38:16";s:12:"english_name";s:16:"English (Canada)";s:11:"native_name";s:16:"English (Canada)";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/en_CA.zip";s:3:"iso";a:3:{i:1;s:2:"en";i:2;s:3:"eng";i:3;s:3:"eng";}s:7:"strings";a:1:{s:8:"continue";s:8:"Continue";}}s:5:"en_AU";a:8:{s:8:"language";s:5:"en_AU";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-13 23:56:05";s:12:"english_name";s:19:"English (Australia)";s:11:"native_name";s:19:"English (Australia)";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/en_AU.zip";s:3:"iso";a:3:{i:1;s:2:"en";i:2;s:3:"eng";i:3;s:3:"eng";}s:7:"strings";a:1:{s:8:"continue";s:8:"Continue";}}s:5:"en_NZ";a:8:{s:8:"language";s:5:"en_NZ";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-17 22:20:50";s:12:"english_name";s:21:"English (New Zealand)";s:11:"native_name";s:21:"English (New Zealand)";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/en_NZ.zip";s:3:"iso";a:3:{i:1;s:2:"en";i:2;s:3:"eng";i:3;s:3:"eng";}s:7:"strings";a:1:{s:8:"continue";s:8:"Continue";}}s:5:"en_GB";a:8:{s:8:"language";s:5:"en_GB";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-17 20:57:21";s:12:"english_name";s:12:"English (UK)";s:11:"native_name";s:12:"English (UK)";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/en_GB.zip";s:3:"iso";a:3:{i:1;s:2:"en";i:2;s:3:"eng";i:3;s:3:"eng";}s:7:"strings";a:1:{s:8:"continue";s:8:"Continue";}}s:2:"eo";a:8:{s:8:"language";s:2:"eo";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-16 10:50:33";s:12:"english_name";s:9:"Esperanto";s:11:"native_name";s:9:"Esperanto";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/eo.zip";s:3:"iso";a:2:{i:1;s:2:"eo";i:2;s:3:"epo";}s:7:"strings";a:1:{s:8:"continue";s:8:"Daŭrigi";}}s:5:"es_MX";a:8:{s:8:"language";s:5:"es_MX";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-18 18:40:22";s:12:"english_name";s:16:"Spanish (Mexico)";s:11:"native_name";s:19:"Español de México";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/es_MX.zip";s:3:"iso";a:2:{i:1;s:2:"es";i:2;s:3:"spa";}s:7:"strings";a:1:{s:8:"continue";s:9:"Continuar";}}s:5:"es_CL";a:8:{s:8:"language";s:5:"es_CL";s:7:"version";s:3:"4.0";s:7:"updated";s:19:"2014-09-04 19:47:01";s:12:"english_name";s:15:"Spanish (Chile)";s:11:"native_name";s:17:"Español de Chile";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.0/es_CL.zip";s:3:"iso";a:2:{i:1;s:2:"es";i:2;s:3:"spa";}s:7:"strings";a:1:{s:8:"continue";s:9:"Continuar";}}s:5:"es_PE";a:8:{s:8:"language";s:5:"es_PE";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-19 14:33:57";s:12:"english_name";s:14:"Spanish (Peru)";s:11:"native_name";s:17:"Español de Perú";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/es_PE.zip";s:3:"iso";a:2:{i:1;s:2:"es";i:2;s:3:"spa";}s:7:"strings";a:1:{s:8:"continue";s:9:"Continuar";}}s:5:"es_ES";a:8:{s:8:"language";s:5:"es_ES";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-19 00:53:46";s:12:"english_name";s:15:"Spanish (Spain)";s:11:"native_name";s:8:"Español";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/es_ES.zip";s:3:"iso";a:1:{i:1;s:2:"es";}s:7:"strings";a:1:{s:8:"continue";s:9:"Continuar";}}s:5:"es_CO";a:8:{s:8:"language";s:5:"es_CO";s:7:"version";s:6:"4.3-RC";s:7:"updated";s:19:"2015-08-04 06:10:33";s:12:"english_name";s:18:"Spanish (Colombia)";s:11:"native_name";s:20:"Español de Colombia";s:7:"package";s:65:"https://downloads.wordpress.org/translation/core/4.3-RC/es_CO.zip";s:3:"iso";a:2:{i:1;s:2:"es";i:2;s:3:"spa";}s:7:"strings";a:1:{s:8:"continue";s:9:"Continuar";}}s:2:"et";a:8:{s:8:"language";s:2:"et";s:7:"version";s:5:"4.2.4";s:7:"updated";s:19:"2015-07-05 20:09:08";s:12:"english_name";s:8:"Estonian";s:11:"native_name";s:5:"Eesti";s:7:"package";s:61:"https://downloads.wordpress.org/translation/core/4.2.4/et.zip";s:3:"iso";a:2:{i:1;s:2:"et";i:2;s:3:"est";}s:7:"strings";a:1:{s:8:"continue";s:6:"Jätka";}}s:2:"eu";a:8:{s:8:"language";s:2:"eu";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-25 13:32:40";s:12:"english_name";s:6:"Basque";s:11:"native_name";s:7:"Euskara";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/eu.zip";s:3:"iso";a:2:{i:1;s:2:"eu";i:2;s:3:"eus";}s:7:"strings";a:1:{s:8:"continue";s:8:"Jarraitu";}}s:5:"fa_IR";a:8:{s:8:"language";s:5:"fa_IR";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-20 13:36:08";s:12:"english_name";s:7:"Persian";s:11:"native_name";s:10:"فارسی";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/fa_IR.zip";s:3:"iso";a:2:{i:1;s:2:"fa";i:2;s:3:"fas";}s:7:"strings";a:1:{s:8:"continue";s:10:"ادامه";}}s:2:"fi";a:8:{s:8:"language";s:2:"fi";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-18 09:17:58";s:12:"english_name";s:7:"Finnish";s:11:"native_name";s:5:"Suomi";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/fi.zip";s:3:"iso";a:2:{i:1;s:2:"fi";i:2;s:3:"fin";}s:7:"strings";a:1:{s:8:"continue";s:5:"Jatka";}}s:5:"fr_FR";a:8:{s:8:"language";s:5:"fr_FR";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-19 10:16:37";s:12:"english_name";s:15:"French (France)";s:11:"native_name";s:9:"Français";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/fr_FR.zip";s:3:"iso";a:1:{i:1;s:2:"fr";}s:7:"strings";a:1:{s:8:"continue";s:9:"Continuer";}}s:2:"gd";a:8:{s:8:"language";s:2:"gd";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-27 14:28:09";s:12:"english_name";s:15:"Scottish Gaelic";s:11:"native_name";s:9:"Gàidhlig";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/gd.zip";s:3:"iso";a:3:{i:1;s:2:"gd";i:2;s:3:"gla";i:3;s:3:"gla";}s:7:"strings";a:1:{s:8:"continue";s:15:"Lean air adhart";}}s:5:"gl_ES";a:8:{s:8:"language";s:5:"gl_ES";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-18 23:34:00";s:12:"english_name";s:8:"Galician";s:11:"native_name";s:6:"Galego";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/gl_ES.zip";s:3:"iso";a:2:{i:1;s:2:"gl";i:2;s:3:"glg";}s:7:"strings";a:1:{s:8:"continue";s:9:"Continuar";}}s:3:"haz";a:8:{s:8:"language";s:3:"haz";s:7:"version";s:5:"4.1.7";s:7:"updated";s:19:"2015-03-26 15:20:27";s:12:"english_name";s:8:"Hazaragi";s:11:"native_name";s:15:"هزاره گی";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.1.7/haz.zip";s:3:"iso";a:1:{i:2;s:3:"haz";}s:7:"strings";a:1:{s:8:"continue";s:10:"ادامه";}}s:5:"he_IL";a:8:{s:8:"language";s:5:"he_IL";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-17 15:13:38";s:12:"english_name";s:6:"Hebrew";s:11:"native_name";s:16:"עִבְרִית";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/he_IL.zip";s:3:"iso";a:1:{i:1;s:2:"he";}s:7:"strings";a:1:{s:8:"continue";s:12:"להמשיך";}}s:2:"hr";a:8:{s:8:"language";s:2:"hr";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-20 22:00:54";s:12:"english_name";s:8:"Croatian";s:11:"native_name";s:8:"Hrvatski";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/hr.zip";s:3:"iso";a:2:{i:1;s:2:"hr";i:2;s:3:"hrv";}s:7:"strings";a:1:{s:8:"continue";s:7:"Nastavi";}}s:5:"hu_HU";a:8:{s:8:"language";s:5:"hu_HU";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-20 12:47:55";s:12:"english_name";s:9:"Hungarian";s:11:"native_name";s:6:"Magyar";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/hu_HU.zip";s:3:"iso";a:2:{i:1;s:2:"hu";i:2;s:3:"hun";}s:7:"strings";a:1:{s:8:"continue";s:7:"Tovább";}}s:2:"hy";a:8:{s:8:"language";s:2:"hy";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-17 13:36:47";s:12:"english_name";s:8:"Armenian";s:11:"native_name";s:14:"Հայերեն";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/hy.zip";s:3:"iso";a:2:{i:1;s:2:"hy";i:2;s:3:"hye";}s:7:"strings";a:1:{s:8:"continue";s:20:"Շարունակել";}}s:5:"id_ID";a:8:{s:8:"language";s:5:"id_ID";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-18 17:46:00";s:12:"english_name";s:10:"Indonesian";s:11:"native_name";s:16:"Bahasa Indonesia";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/id_ID.zip";s:3:"iso";a:2:{i:1;s:2:"id";i:2;s:3:"ind";}s:7:"strings";a:1:{s:8:"continue";s:9:"Lanjutkan";}}s:5:"is_IS";a:8:{s:8:"language";s:5:"is_IS";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-22 13:47:37";s:12:"english_name";s:9:"Icelandic";s:11:"native_name";s:9:"Íslenska";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/is_IS.zip";s:3:"iso";a:2:{i:1;s:2:"is";i:2;s:3:"isl";}s:7:"strings";a:1:{s:8:"continue";s:6:"Áfram";}}s:5:"it_IT";a:8:{s:8:"language";s:5:"it_IT";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-19 06:13:38";s:12:"english_name";s:7:"Italian";s:11:"native_name";s:8:"Italiano";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/it_IT.zip";s:3:"iso";a:2:{i:1;s:2:"it";i:2;s:3:"ita";}s:7:"strings";a:1:{s:8:"continue";s:8:"Continua";}}s:2:"ja";a:8:{s:8:"language";s:2:"ja";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-30 13:49:18";s:12:"english_name";s:8:"Japanese";s:11:"native_name";s:9:"日本語";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/ja.zip";s:3:"iso";a:1:{i:1;s:2:"ja";}s:7:"strings";a:1:{s:8:"continue";s:9:"続ける";}}s:5:"ko_KR";a:8:{s:8:"language";s:5:"ko_KR";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-17 22:59:51";s:12:"english_name";s:6:"Korean";s:11:"native_name";s:9:"한국어";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/ko_KR.zip";s:3:"iso";a:2:{i:1;s:2:"ko";i:2;s:3:"kor";}s:7:"strings";a:1:{s:8:"continue";s:6:"계속";}}s:5:"lt_LT";a:8:{s:8:"language";s:5:"lt_LT";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-18 07:48:28";s:12:"english_name";s:10:"Lithuanian";s:11:"native_name";s:15:"Lietuvių kalba";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/lt_LT.zip";s:3:"iso";a:2:{i:1;s:2:"lt";i:2;s:3:"lit";}s:7:"strings";a:1:{s:8:"continue";s:6:"Tęsti";}}s:5:"my_MM";a:8:{s:8:"language";s:5:"my_MM";s:7:"version";s:5:"4.1.7";s:7:"updated";s:19:"2015-03-26 15:57:42";s:12:"english_name";s:17:"Myanmar (Burmese)";s:11:"native_name";s:15:"ဗမာစာ";s:7:"package";s:64:"https://downloads.wordpress.org/translation/core/4.1.7/my_MM.zip";s:3:"iso";a:2:{i:1;s:2:"my";i:2;s:3:"mya";}s:7:"strings";a:1:{s:8:"continue";s:54:"ဆက်လက်လုပ်ေဆာင်ပါ။";}}s:5:"nb_NO";a:8:{s:8:"language";s:5:"nb_NO";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-17 18:45:19";s:12:"english_name";s:19:"Norwegian (Bokmål)";s:11:"native_name";s:13:"Norsk bokmål";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/nb_NO.zip";s:3:"iso";a:2:{i:1;s:2:"nb";i:2;s:3:"nob";}s:7:"strings";a:1:{s:8:"continue";s:8:"Fortsett";}}s:5:"nl_NL";a:8:{s:8:"language";s:5:"nl_NL";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-20 06:57:09";s:12:"english_name";s:5:"Dutch";s:11:"native_name";s:10:"Nederlands";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/nl_NL.zip";s:3:"iso";a:2:{i:1;s:2:"nl";i:2;s:3:"nld";}s:7:"strings";a:1:{s:8:"continue";s:8:"Doorgaan";}}s:5:"nn_NO";a:8:{s:8:"language";s:5:"nn_NO";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-17 18:56:13";s:12:"english_name";s:19:"Norwegian (Nynorsk)";s:11:"native_name";s:13:"Norsk nynorsk";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/nn_NO.zip";s:3:"iso";a:2:{i:1;s:2:"nn";i:2;s:3:"nno";}s:7:"strings";a:1:{s:8:"continue";s:9:"Hald fram";}}s:3:"oci";a:8:{s:8:"language";s:3:"oci";s:7:"version";s:6:"4.3-RC";s:7:"updated";s:19:"2015-08-02 07:53:33";s:12:"english_name";s:7:"Occitan";s:11:"native_name";s:7:"Occitan";s:7:"package";s:63:"https://downloads.wordpress.org/translation/core/4.3-RC/oci.zip";s:3:"iso";a:2:{i:1;s:2:"oc";i:2;s:3:"oci";}s:7:"strings";a:1:{s:8:"continue";s:9:"Contunhar";}}s:5:"pl_PL";a:8:{s:8:"language";s:5:"pl_PL";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-27 13:38:57";s:12:"english_name";s:6:"Polish";s:11:"native_name";s:6:"Polski";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/pl_PL.zip";s:3:"iso";a:2:{i:1;s:2:"pl";i:2;s:3:"pol";}s:7:"strings";a:1:{s:8:"continue";s:9:"Kontynuuj";}}s:2:"ps";a:8:{s:8:"language";s:2:"ps";s:7:"version";s:5:"4.1.7";s:7:"updated";s:19:"2015-03-29 22:19:48";s:12:"english_name";s:6:"Pashto";s:11:"native_name";s:8:"پښتو";s:7:"package";s:61:"https://downloads.wordpress.org/translation/core/4.1.7/ps.zip";s:3:"iso";a:1:{i:1;s:2:"ps";}s:7:"strings";a:1:{s:8:"continue";s:8:"دوام";}}s:5:"pt_PT";a:8:{s:8:"language";s:5:"pt_PT";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-26 17:56:53";s:12:"english_name";s:21:"Portuguese (Portugal)";s:11:"native_name";s:10:"Português";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/pt_PT.zip";s:3:"iso";a:1:{i:1;s:2:"pt";}s:7:"strings";a:1:{s:8:"continue";s:9:"Continuar";}}s:5:"pt_BR";a:8:{s:8:"language";s:5:"pt_BR";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-20 02:24:55";s:12:"english_name";s:19:"Portuguese (Brazil)";s:11:"native_name";s:20:"Português do Brasil";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/pt_BR.zip";s:3:"iso";a:2:{i:1;s:2:"pt";i:2;s:3:"por";}s:7:"strings";a:1:{s:8:"continue";s:9:"Continuar";}}s:5:"ro_RO";a:8:{s:8:"language";s:5:"ro_RO";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-18 16:44:05";s:12:"english_name";s:8:"Romanian";s:11:"native_name";s:8:"Română";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/ro_RO.zip";s:3:"iso";a:2:{i:1;s:2:"ro";i:2;s:3:"ron";}s:7:"strings";a:1:{s:8:"continue";s:9:"Continuă";}}s:5:"ru_RU";a:8:{s:8:"language";s:5:"ru_RU";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-19 13:19:05";s:12:"english_name";s:7:"Russian";s:11:"native_name";s:14:"Русский";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/ru_RU.zip";s:3:"iso";a:2:{i:1;s:2:"ru";i:2;s:3:"rus";}s:7:"strings";a:1:{s:8:"continue";s:20:"Продолжить";}}s:5:"sk_SK";a:8:{s:8:"language";s:5:"sk_SK";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-31 19:45:06";s:12:"english_name";s:6:"Slovak";s:11:"native_name";s:11:"Slovenčina";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/sk_SK.zip";s:3:"iso";a:2:{i:1;s:2:"sk";i:2;s:3:"slk";}s:7:"strings";a:1:{s:8:"continue";s:12:"Pokračovať";}}s:5:"sl_SI";a:8:{s:8:"language";s:5:"sl_SI";s:7:"version";s:5:"4.1.7";s:7:"updated";s:19:"2015-03-26 16:25:46";s:12:"english_name";s:9:"Slovenian";s:11:"native_name";s:13:"Slovenščina";s:7:"package";s:64:"https://downloads.wordpress.org/translation/core/4.1.7/sl_SI.zip";s:3:"iso";a:2:{i:1;s:2:"sl";i:2;s:3:"slv";}s:7:"strings";a:1:{s:8:"continue";s:10:"Nadaljujte";}}s:2:"sq";a:8:{s:8:"language";s:2:"sq";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-18 17:16:31";s:12:"english_name";s:8:"Albanian";s:11:"native_name";s:5:"Shqip";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/sq.zip";s:3:"iso";a:2:{i:1;s:2:"sq";i:2;s:3:"sqi";}s:7:"strings";a:1:{s:8:"continue";s:6:"Vazhdo";}}s:5:"sr_RS";a:8:{s:8:"language";s:5:"sr_RS";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-17 18:31:56";s:12:"english_name";s:7:"Serbian";s:11:"native_name";s:23:"Српски језик";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/sr_RS.zip";s:3:"iso";a:2:{i:1;s:2:"sr";i:2;s:3:"srp";}s:7:"strings";a:1:{s:8:"continue";s:14:"Настави";}}s:5:"sv_SE";a:8:{s:8:"language";s:5:"sv_SE";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-19 10:43:45";s:12:"english_name";s:7:"Swedish";s:11:"native_name";s:7:"Svenska";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/sv_SE.zip";s:3:"iso";a:2:{i:1;s:2:"sv";i:2;s:3:"swe";}s:7:"strings";a:1:{s:8:"continue";s:9:"Fortsätt";}}s:2:"th";a:8:{s:8:"language";s:2:"th";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-18 14:10:42";s:12:"english_name";s:4:"Thai";s:11:"native_name";s:9:"ไทย";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/th.zip";s:3:"iso";a:2:{i:1;s:2:"th";i:2;s:3:"tha";}s:7:"strings";a:1:{s:8:"continue";s:15:"ต่อไป";}}s:2:"tl";a:8:{s:8:"language";s:2:"tl";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-20 03:52:15";s:12:"english_name";s:7:"Tagalog";s:11:"native_name";s:7:"Tagalog";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/tl.zip";s:3:"iso";a:2:{i:1;s:2:"tl";i:2;s:3:"tgl";}s:7:"strings";a:1:{s:8:"continue";s:10:"Magpatuloy";}}s:5:"tr_TR";a:8:{s:8:"language";s:5:"tr_TR";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-20 05:50:57";s:12:"english_name";s:7:"Turkish";s:11:"native_name";s:8:"Türkçe";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/tr_TR.zip";s:3:"iso";a:2:{i:1;s:2:"tr";i:2;s:3:"tur";}s:7:"strings";a:1:{s:8:"continue";s:5:"Devam";}}s:5:"ug_CN";a:8:{s:8:"language";s:5:"ug_CN";s:7:"version";s:5:"4.1.7";s:7:"updated";s:19:"2015-03-26 16:45:38";s:12:"english_name";s:6:"Uighur";s:11:"native_name";s:9:"Uyƣurqə";s:7:"package";s:64:"https://downloads.wordpress.org/translation/core/4.1.7/ug_CN.zip";s:3:"iso";a:2:{i:1;s:2:"ug";i:2;s:3:"uig";}s:7:"strings";a:1:{s:8:"continue";s:26:"داۋاملاشتۇرۇش";}}s:2:"uk";a:8:{s:8:"language";s:2:"uk";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-25 16:05:03";s:12:"english_name";s:9:"Ukrainian";s:11:"native_name";s:20:"Українська";s:7:"package";s:59:"https://downloads.wordpress.org/translation/core/4.3/uk.zip";s:3:"iso";a:2:{i:1;s:2:"uk";i:2;s:3:"ukr";}s:7:"strings";a:1:{s:8:"continue";s:20:"Продовжити";}}s:5:"zh_TW";a:8:{s:8:"language";s:5:"zh_TW";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-19 00:50:06";s:12:"english_name";s:16:"Chinese (Taiwan)";s:11:"native_name";s:12:"繁體中文";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/zh_TW.zip";s:3:"iso";a:2:{i:1;s:2:"zh";i:2;s:3:"zho";}s:7:"strings";a:1:{s:8:"continue";s:6:"繼續";}}s:5:"zh_CN";a:8:{s:8:"language";s:5:"zh_CN";s:7:"version";s:3:"4.3";s:7:"updated";s:19:"2015-08-20 19:10:20";s:12:"english_name";s:15:"Chinese (China)";s:11:"native_name";s:12:"简体中文";s:7:"package";s:62:"https://downloads.wordpress.org/translation/core/4.3/zh_CN.zip";s:3:"iso";a:2:{i:1;s:2:"zh";i:2;s:3:"zho";}s:7:"strings";a:1:{s:8:"continue";s:6:"继续";}}}', 'yes'),
@@ -263,11 +278,14 @@ INSERT INTO `sdm_options` (`option_id`, `option_name`, `option_value`, `autoload
 --
 
 CREATE TABLE IF NOT EXISTS `sdm_postmeta` (
-`meta_id` bigint(20) unsigned NOT NULL,
+  `meta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `post_id` bigint(20) unsigned NOT NULL DEFAULT '0',
   `meta_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `meta_value` longtext COLLATE utf8mb4_unicode_ci
-) ENGINE=InnoDB AUTO_INCREMENT=246 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `meta_value` longtext COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`meta_id`),
+  KEY `post_id` (`post_id`),
+  KEY `meta_key` (`meta_key`(191))
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=256 ;
 
 --
 -- Dumping data for table `sdm_postmeta`
@@ -302,11 +320,11 @@ INSERT INTO `sdm_postmeta` (`meta_id`, `post_id`, `meta_key`, `meta_value`) VALU
 (44, 14, '_menu_item_xfn', ''),
 (45, 14, '_menu_item_url', ''),
 (46, 15, '_edit_last', '1'),
-(47, 15, '_edit_lock', '1441002892:1'),
+(47, 15, '_edit_lock', '1441209069:1'),
 (48, 16, '_wp_attached_file', '2015/08/photodune-1523200-butterfly-m-920x780.jpg'),
 (49, 16, '_wp_attachment_metadata', 'a:5:{s:5:"width";i:920;s:6:"height";i:780;s:4:"file";s:49:"2015/08/photodune-1523200-butterfly-m-920x780.jpg";s:5:"sizes";a:4:{s:9:"thumbnail";a:4:{s:4:"file";s:49:"photodune-1523200-butterfly-m-920x780-150x150.jpg";s:5:"width";i:150;s:6:"height";i:150;s:9:"mime-type";s:10:"image/jpeg";}s:6:"medium";a:4:{s:4:"file";s:49:"photodune-1523200-butterfly-m-920x780-300x254.jpg";s:5:"width";i:300;s:6:"height";i:254;s:9:"mime-type";s:10:"image/jpeg";}s:14:"post-thumbnail";a:4:{s:4:"file";s:49:"photodune-1523200-butterfly-m-920x780-672x372.jpg";s:5:"width";i:672;s:6:"height";i:372;s:9:"mime-type";s:10:"image/jpeg";}s:18:"starter-full-width";a:4:{s:4:"file";s:49:"photodune-1523200-butterfly-m-920x780-920x576.jpg";s:5:"width";i:920;s:6:"height";i:576;s:9:"mime-type";s:10:"image/jpeg";}}s:10:"image_meta";a:11:{s:8:"aperture";i:0;s:6:"credit";s:0:"";s:6:"camera";s:0:"";s:7:"caption";s:0:"";s:17:"created_timestamp";i:0;s:9:"copyright";s:0:"";s:12:"focal_length";i:0;s:3:"iso";i:0;s:13:"shutter_speed";i:0;s:5:"title";s:0:"";s:11:"orientation";i:0;}}'),
 (50, 15, '_thumbnail_id', '16'),
-(51, 15, 'exela_portfolio_meta_images', 'a:3:{i:17;s:69:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/05.jpg";i:18;s:69:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/06.jpg";i:19;s:69:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/09.jpg";}'),
+(51, 15, 'exela_portfolio_meta_images', 'a:3:{i:17;s:69:"http://localhost/somrat_dot_me/wp-content/uploads/2015/08/05.jpg";i:18;s:69:"http://localhost/somrat_dot_me/wp-content/uploads/2015/08/06.jpg";i:19;s:69:"http://localhost/somrat_dot_me/wp-content/uploads/2015/08/09.jpg";}'),
 (52, 15, 'exela_portfolio_meta_url', 'http://portfolio1.com'),
 (53, 17, '_wp_attached_file', '2015/08/05.jpg'),
 (54, 17, '_wp_attachment_metadata', 'a:5:{s:5:"width";i:1000;s:6:"height";i:450;s:4:"file";s:14:"2015/08/05.jpg";s:5:"sizes";a:3:{s:9:"thumbnail";a:4:{s:4:"file";s:14:"05-150x150.jpg";s:5:"width";i:150;s:6:"height";i:150;s:9:"mime-type";s:10:"image/jpeg";}s:6:"medium";a:4:{s:4:"file";s:14:"05-300x135.jpg";s:5:"width";i:300;s:6:"height";i:135;s:9:"mime-type";s:10:"image/jpeg";}s:14:"post-thumbnail";a:4:{s:4:"file";s:14:"05-672x372.jpg";s:5:"width";i:672;s:6:"height";i:372;s:9:"mime-type";s:10:"image/jpeg";}}s:10:"image_meta";a:11:{s:8:"aperture";i:0;s:6:"credit";s:0:"";s:6:"camera";s:0:"";s:7:"caption";s:0:"";s:17:"created_timestamp";i:0;s:9:"copyright";s:0:"";s:12:"focal_length";i:0;s:3:"iso";i:0;s:13:"shutter_speed";i:0;s:5:"title";s:0:"";s:11:"orientation";i:0;}}'),
@@ -315,9 +333,7 @@ INSERT INTO `sdm_postmeta` (`meta_id`, `post_id`, `meta_key`, `meta_value`) VALU
 (57, 19, '_wp_attached_file', '2015/08/09.jpg'),
 (58, 19, '_wp_attachment_metadata', 'a:5:{s:5:"width";i:1000;s:6:"height";i:450;s:4:"file";s:14:"2015/08/09.jpg";s:5:"sizes";a:3:{s:9:"thumbnail";a:4:{s:4:"file";s:14:"09-150x150.jpg";s:5:"width";i:150;s:6:"height";i:150;s:9:"mime-type";s:10:"image/jpeg";}s:6:"medium";a:4:{s:4:"file";s:14:"09-300x135.jpg";s:5:"width";i:300;s:6:"height";i:135;s:9:"mime-type";s:10:"image/jpeg";}s:14:"post-thumbnail";a:4:{s:4:"file";s:14:"09-672x372.jpg";s:5:"width";i:672;s:6:"height";i:372;s:9:"mime-type";s:10:"image/jpeg";}}s:10:"image_meta";a:11:{s:8:"aperture";i:0;s:6:"credit";s:0:"";s:6:"camera";s:0:"";s:7:"caption";s:0:"";s:17:"created_timestamp";i:0;s:9:"copyright";s:0:"";s:12:"focal_length";i:0;s:3:"iso";i:0;s:13:"shutter_speed";i:0;s:5:"title";s:0:"";s:11:"orientation";i:0;}}'),
 (59, 20, '_edit_last', '1'),
-(60, 20, '_edit_lock', '1441177624:1'),
-(61, 20, '_thumbnail_id', '19'),
-(62, 20, 'exela_portfolio_meta_images', 'a:2:{i:18;s:69:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/06.jpg";i:17;s:69:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/05.jpg";}'),
+(60, 20, '_edit_lock', '1441209061:1'),
 (63, 20, 'exela_portfolio_meta_url', 'http://portfloi2.com'),
 (64, 24, '_wp_attached_file', '2015/08/angular-js-images-10.jpg'),
 (65, 24, '_wp_attachment_metadata', 'a:5:{s:5:"width";i:1600;s:6:"height";i:900;s:4:"file";s:32:"2015/08/angular-js-images-10.jpg";s:5:"sizes";a:5:{s:9:"thumbnail";a:4:{s:4:"file";s:32:"angular-js-images-10-150x150.jpg";s:5:"width";i:150;s:6:"height";i:150;s:9:"mime-type";s:10:"image/jpeg";}s:6:"medium";a:4:{s:4:"file";s:32:"angular-js-images-10-300x169.jpg";s:5:"width";i:300;s:6:"height";i:169;s:9:"mime-type";s:10:"image/jpeg";}s:5:"large";a:4:{s:4:"file";s:33:"angular-js-images-10-1024x576.jpg";s:5:"width";i:1024;s:6:"height";i:576;s:9:"mime-type";s:10:"image/jpeg";}s:14:"post-thumbnail";a:4:{s:4:"file";s:32:"angular-js-images-10-672x372.jpg";s:5:"width";i:672;s:6:"height";i:372;s:9:"mime-type";s:10:"image/jpeg";}s:18:"starter-full-width";a:4:{s:4:"file";s:33:"angular-js-images-10-1038x576.jpg";s:5:"width";i:1038;s:6:"height";i:576;s:9:"mime-type";s:10:"image/jpeg";}}s:10:"image_meta";a:11:{s:8:"aperture";i:0;s:6:"credit";s:0:"";s:6:"camera";s:0:"";s:7:"caption";s:0:"";s:17:"created_timestamp";i:0;s:9:"copyright";s:0:"";s:12:"focal_length";i:0;s:3:"iso";i:0;s:13:"shutter_speed";i:0;s:5:"title";s:0:"";s:11:"orientation";i:0;}}'),
@@ -402,27 +418,19 @@ INSERT INTO `sdm_postmeta` (`meta_id`, `post_id`, `meta_key`, `meta_value`) VALU
 (164, 39, '_menu_item_url', '#'),
 (166, 2, '_edit_lock', '1441130381:1'),
 (167, 43, '_edit_last', '1'),
-(168, 43, '_edit_lock', '1441178940:1'),
-(170, 43, 'exela_portfolio_meta_images', 'a:2:{i:24;s:87:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/angular-js-images-10.jpg";i:27;s:73:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/jquery.png";}'),
+(168, 43, '_edit_lock', '1441209063:1'),
 (171, 43, 'exela_portfolio_meta_url', 'http://portfolio3'),
 (172, 44, '_edit_last', '1'),
-(173, 44, '_edit_lock', '1441178939:1'),
-(174, 44, 'exela_portfolio_meta_images', 'a:2:{i:24;s:87:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/angular-js-images-10.jpg";i:27;s:73:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/jquery.png";}'),
+(173, 44, '_edit_lock', '1441209064:1'),
 (175, 44, 'exela_portfolio_meta_url', 'http://portfolio4'),
 (176, 45, '_edit_last', '1'),
-(177, 45, '_edit_lock', '1441178937:1'),
-(178, 45, 'exela_portfolio_meta_images', 'a:2:{i:27;s:73:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/jquery.png";i:28;s:89:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/Wordpress-Splash-Image.png";}'),
+(177, 45, '_edit_lock', '1441209066:1'),
 (179, 45, 'exela_portfolio_meta_url', 'http://portfolio5'),
 (182, 46, '_edit_last', '1'),
-(183, 46, '_edit_lock', '1441178857:1'),
+(183, 46, '_edit_lock', '1441209067:1'),
 (184, 47, '_wp_attached_file', '2015/09/05.jpg'),
 (185, 47, '_wp_attachment_metadata', 'a:5:{s:5:"width";i:800;s:6:"height";i:591;s:4:"file";s:14:"2015/09/05.jpg";s:5:"sizes";a:4:{s:9:"thumbnail";a:4:{s:4:"file";s:14:"05-150x150.jpg";s:5:"width";i:150;s:6:"height";i:150;s:9:"mime-type";s:10:"image/jpeg";}s:6:"medium";a:4:{s:4:"file";s:14:"05-300x222.jpg";s:5:"width";i:300;s:6:"height";i:222;s:9:"mime-type";s:10:"image/jpeg";}s:14:"post-thumbnail";a:4:{s:4:"file";s:14:"05-672x372.jpg";s:5:"width";i:672;s:6:"height";i:372;s:9:"mime-type";s:10:"image/jpeg";}s:18:"starter-full-width";a:4:{s:4:"file";s:14:"05-800x576.jpg";s:5:"width";i:800;s:6:"height";i:576;s:9:"mime-type";s:10:"image/jpeg";}}s:10:"image_meta";a:11:{s:8:"aperture";i:0;s:6:"credit";s:0:"";s:6:"camera";s:0:"";s:7:"caption";s:0:"";s:17:"created_timestamp";i:0;s:9:"copyright";s:0:"";s:12:"focal_length";i:0;s:3:"iso";i:0;s:13:"shutter_speed";i:0;s:5:"title";s:0:"";s:11:"orientation";i:1;}}'),
-(186, 46, '_thumbnail_id', '47'),
-(187, 46, 'exela_portfolio_meta_images', 'a:3:{i:27;s:73:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/jquery.png";i:24;s:87:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/angular-js-images-10.jpg";i:28;s:89:"http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/Wordpress-Splash-Image.png";}'),
 (188, 46, 'exela_portfolio_meta_url', 'http://po6'),
-(189, 43, '_thumbnail_id', '47'),
-(190, 44, '_thumbnail_id', '19'),
-(191, 45, '_thumbnail_id', '17'),
 (192, 49, '_menu_item_type', 'post_type'),
 (193, 49, '_menu_item_menu_item_parent', '0'),
 (194, 49, '_menu_item_object_id', '10'),
@@ -470,7 +478,17 @@ INSERT INTO `sdm_postmeta` (`meta_id`, `post_id`, `meta_key`, `meta_value`) VALU
 (241, 54, '_menu_item_target', ''),
 (242, 54, '_menu_item_classes', 'a:2:{i:0;s:2:"fa";i:1;s:10:"fa-comment";}'),
 (243, 54, '_menu_item_xfn', ''),
-(244, 54, '_menu_item_url', '#');
+(244, 54, '_menu_item_url', '#'),
+(246, 20, '_thumbnail_id', '16'),
+(247, 43, '_thumbnail_id', '16'),
+(248, 44, '_thumbnail_id', '16'),
+(249, 45, '_thumbnail_id', '16'),
+(250, 46, '_thumbnail_id', '16'),
+(251, 55, '_edit_last', '1'),
+(252, 55, '_edit_lock', '1441211264:1'),
+(253, 55, '_thumbnail_id', '16'),
+(254, 55, 'exela_portfolio_meta_images', 'a:3:{i:47;s:64:"http://localhost/somrat_dot_me/wp-content/uploads/2015/09/05.jpg";i:19;s:64:"http://localhost/somrat_dot_me/wp-content/uploads/2015/08/09.jpg";i:16;s:99:"http://localhost/somrat_dot_me/wp-content/uploads/2015/08/photodune-1523200-butterfly-m-920x780.jpg";}'),
+(255, 55, 'exela_portfolio_meta_url', 'http://urlll');
 
 -- --------------------------------------------------------
 
@@ -479,7 +497,7 @@ INSERT INTO `sdm_postmeta` (`meta_id`, `post_id`, `meta_key`, `meta_value`) VALU
 --
 
 CREATE TABLE IF NOT EXISTS `sdm_posts` (
-`ID` bigint(20) unsigned NOT NULL,
+  `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `post_author` bigint(20) unsigned NOT NULL DEFAULT '0',
   `post_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `post_date_gmt` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -501,64 +519,70 @@ CREATE TABLE IF NOT EXISTS `sdm_posts` (
   `menu_order` int(11) NOT NULL DEFAULT '0',
   `post_type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'post',
   `post_mime_type` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `comment_count` bigint(20) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `comment_count` bigint(20) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`),
+  KEY `post_name` (`post_name`(191)),
+  KEY `type_status_date` (`post_type`,`post_status`,`post_date`,`ID`),
+  KEY `post_parent` (`post_parent`),
+  KEY `post_author` (`post_author`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=56 ;
 
 --
 -- Dumping data for table `sdm_posts`
 --
 
 INSERT INTO `sdm_posts` (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_title`, `post_excerpt`, `post_status`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_content_filtered`, `post_parent`, `guid`, `menu_order`, `post_type`, `post_mime_type`, `comment_count`) VALUES
-(1, 1, '2015-08-30 06:44:28', '2015-08-30 06:44:28', 'Welcome to WordPress. This is your first post. Edit or delete it, then start writing!', 'Hello world!', '', 'publish', 'open', 'open', '', 'hello-world', '', '', '2015-08-30 10:11:46', '2015-08-30 10:11:46', '', 0, 'http://localhost:8080/somrat_dot_me/?p=1', 0, 'post', '', 1),
-(2, 1, '2015-08-30 06:44:28', '2015-08-30 06:44:28', 'This is an example page. It''s different from a blog post because it will stay in one place and will show up in your site navigation (in most themes). Most people start with an About page that introduces them to potential site visitors. It might say something like this:\n\n<blockquote>Hi there! I''m a bike messenger by day, aspiring actor by night, and this is my website. I live in Los Angeles, have a great dog named Jack, and I like pi&#241;a coladas. (And gettin'' caught in the rain.)</blockquote>\n\n...or something like this:\n\n<blockquote>The XYZ Doohickey Company was founded in 1971, and has been providing quality doohickeys to the public ever since. Located in Gotham City, XYZ employs over 2,000 people and does all kinds of awesome things for the Gotham community.</blockquote>\n\nAs a new WordPress user, you should go to <a href="http://localhost:8080/somrat_dot_me/wp-admin/">your dashboard</a> to delete this page and create new pages for your content. Have fun!', 'Sample Page', '', 'publish', 'open', 'open', '', 'sample-page', '', '', '2015-08-30 06:44:28', '2015-08-30 06:44:28', '', 0, 'http://localhost:8080/somrat_dot_me/?page_id=2', 0, 'page', '', 0),
-(3, 1, '2015-08-30 06:44:43', '0000-00-00 00:00:00', '', 'Auto Draft', '', 'auto-draft', 'open', 'open', '', '', '', '', '2015-08-30 06:44:43', '0000-00-00 00:00:00', '', 0, 'http://localhost:8080/somrat_dot_me/?p=3', 0, 'post', '', 0),
-(4, 1, '2015-08-30 08:54:17', '2015-08-30 08:54:17', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Test Post 1', '', 'publish', 'open', 'open', '', 'test-post-1', '', '', '2015-08-30 10:11:40', '2015-08-30 10:11:40', '', 0, 'http://localhost:8080/somrat_dot_me/?p=4', 0, 'post', '', 0),
-(5, 1, '2015-08-30 08:54:17', '2015-08-30 08:54:17', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Test Post 1', '', 'inherit', 'closed', 'closed', '', '4-revision-v1', '', '', '2015-08-30 08:54:17', '2015-08-30 08:54:17', '', 4, 'http://localhost:8080/somrat_dot_me/4-revision-v1/', 0, 'revision', '', 0),
-(6, 1, '2015-08-30 08:54:46', '2015-08-30 08:54:46', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Test post 2', '', 'publish', 'open', 'open', '', 'test-post-2', '', '', '2015-08-30 10:11:28', '2015-08-30 10:11:28', '', 0, 'http://localhost:8080/somrat_dot_me/?p=6', 0, 'post', '', 0),
-(7, 1, '2015-08-30 08:54:46', '2015-08-30 08:54:46', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Test post 2', '', 'inherit', 'closed', 'closed', '', '6-revision-v1', '', '', '2015-08-30 08:54:46', '2015-08-30 08:54:46', '', 6, 'http://localhost:8080/somrat_dot_me/6-revision-v1/', 0, 'revision', '', 0),
-(8, 1, '2015-08-30 10:11:46', '2015-08-30 10:11:46', 'Welcome to WordPress. This is your first post. Edit or delete it, then start writing!', 'Hello world!', '', 'inherit', 'closed', 'closed', '', '1-revision-v1', '', '', '2015-08-30 10:11:46', '2015-08-30 10:11:46', '', 1, 'http://localhost:8080/somrat_dot_me/1-revision-v1/', 0, 'revision', '', 0),
-(9, 1, '2015-08-30 10:11:50', '0000-00-00 00:00:00', '', 'Auto Draft', '', 'auto-draft', 'open', 'open', '', '', '', '', '2015-08-30 10:11:50', '0000-00-00 00:00:00', '', 0, 'http://localhost:8080/somrat_dot_me/?p=9', 0, 'post', '', 0),
-(10, 1, '2015-08-30 12:04:02', '2015-08-30 12:04:02', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\r\n\r\n<img class="alignnone wp-image-19 size-medium" src="http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/09-300x135.jpg" alt="09" width="300" height="135" />', 'About Me', '', 'publish', 'closed', 'closed', '', 'about-me', '', '', '2015-09-02 04:06:34', '2015-09-02 04:06:34', '', 0, 'http://localhost:8080/somrat_dot_me/?page_id=10', 0, 'page', '', 0),
-(11, 1, '2015-08-30 12:04:02', '2015-08-30 12:04:02', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'About Me', '', 'inherit', 'closed', 'closed', '', '10-revision-v1', '', '', '2015-08-30 12:04:02', '2015-08-30 12:04:02', '', 10, 'http://localhost:8080/somrat_dot_me/10-revision-v1/', 0, 'revision', '', 0),
-(12, 1, '2015-08-30 12:05:10', '2015-08-30 12:05:10', ' ', '', '', 'publish', 'closed', 'closed', '', '12', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost:8080/somrat_dot_me/?p=12', 1, 'nav_menu_item', '', 0),
-(14, 1, '2015-08-30 12:05:11', '2015-08-30 12:05:11', ' ', '', '', 'publish', 'closed', 'closed', '', '14', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost:8080/somrat_dot_me/?p=14', 2, 'nav_menu_item', '', 0),
-(15, 1, '2015-08-31 06:13:40', '2015-08-31 06:13:40', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Portfolio 1', 'is simply dummy text of the printing and typesetting industry.', 'publish', 'closed', 'closed', '', 'portfolio-1', '', '', '2015-08-31 06:36:45', '2015-08-31 06:36:45', '', 0, 'http://localhost:8080/somrat_dot_me/?post_type=portfolio&#038;p=15', 1, 'portfolio', '', 0),
-(16, 1, '2015-08-31 06:13:08', '2015-08-31 06:13:08', '', 'photodune-1523200-butterfly-m-920x780', '', 'inherit', 'open', 'closed', '', 'photodune-1523200-butterfly-m-920x780', '', '', '2015-08-31 06:13:08', '2015-08-31 06:13:08', '', 15, 'http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/photodune-1523200-butterfly-m-920x780.jpg', 0, 'attachment', 'image/jpeg', 0),
-(17, 1, '2015-08-31 06:34:28', '2015-08-31 06:34:28', '', '05', '', 'inherit', 'open', 'closed', '', '05', '', '', '2015-08-31 06:34:28', '2015-08-31 06:34:28', '', 15, 'http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/05.jpg', 0, 'attachment', 'image/jpeg', 0),
-(18, 1, '2015-08-31 06:34:29', '2015-08-31 06:34:29', '', '06', '', 'inherit', 'open', 'closed', '', '06', '', '', '2015-08-31 06:34:29', '2015-08-31 06:34:29', '', 15, 'http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/06.jpg', 0, 'attachment', 'image/jpeg', 0),
-(19, 1, '2015-08-31 06:34:29', '2015-08-31 06:34:29', '', '09', '', 'inherit', 'open', 'closed', '', '09', '', '', '2015-08-31 06:34:29', '2015-08-31 06:34:29', '', 15, 'http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/09.jpg', 0, 'attachment', 'image/jpeg', 0),
-(20, 1, '2015-08-31 06:38:44', '2015-08-31 06:38:44', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining esum.', 'Portfolio 2', ' It has survived not only five', 'publish', 'closed', 'closed', '', 'portfolio-2', '', '', '2015-08-31 06:38:44', '2015-08-31 06:38:44', '', 0, 'http://localhost:8080/somrat_dot_me/?post_type=portfolio&#038;p=20', 2, 'portfolio', '', 0),
-(21, 1, '2015-08-31 07:30:37', '0000-00-00 00:00:00', '', 'Auto Draft', '', 'auto-draft', 'closed', 'closed', '', '', '', '', '2015-08-31 07:30:37', '0000-00-00 00:00:00', '', 0, 'http://localhost:8080/somrat_dot_me/?post_type=portfolio&p=21', 0, 'portfolio', '', 0),
-(22, 1, '2015-08-31 11:38:41', '0000-00-00 00:00:00', '', 'Auto Draft', '', 'auto-draft', 'closed', 'closed', '', '', '', '', '2015-08-31 11:38:41', '0000-00-00 00:00:00', '', 0, 'http://localhost:8080/somrat_dot_me/?page_id=22', 0, 'page', '', 0),
-(23, 1, '2015-08-31 11:41:44', '2015-08-31 11:41:44', '', 'Media', '', 'private', 'closed', 'closed', '', 'media', '', '', '2015-08-31 11:41:44', '2015-08-31 11:41:44', '', 0, 'http://localhost:8080/somrat_dot_me/?option-tree=media', 0, 'option-tree', '', 0),
-(24, 1, '2015-09-01 03:18:00', '2015-09-01 03:18:00', '', 'angular-js-images-10', '', 'inherit', 'open', 'closed', '', 'angular-js-images-10', '', '', '2015-09-01 03:18:00', '2015-09-01 03:18:00', '', 23, 'http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/angular-js-images-10.jpg', 0, 'attachment', 'image/jpeg', 0),
-(27, 1, '2015-09-01 03:18:02', '2015-09-01 03:18:02', '', 'jquery', '', 'inherit', 'open', 'closed', '', 'jquery', '', '', '2015-09-01 03:18:02', '2015-09-01 03:18:02', '', 23, 'http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/jquery.png', 0, 'attachment', 'image/png', 0),
-(28, 1, '2015-09-01 03:18:04', '2015-09-01 03:18:04', '', 'Wordpress-Splash-Image', '', 'inherit', 'open', 'closed', '', 'wordpress-splash-image', '', '', '2015-09-01 03:18:04', '2015-09-01 03:18:04', '', 23, 'http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/Wordpress-Splash-Image.png', 0, 'attachment', 'image/png', 0),
-(29, 1, '2015-09-01 05:41:54', '2015-09-01 05:41:54', '', '522698_3806913229644_1672316026_n', '', 'inherit', 'open', 'closed', '', '522698_3806913229644_1672316026_n', '', '', '2015-09-01 05:41:54', '2015-09-01 05:41:54', '', 23, 'http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/522698_3806913229644_1672316026_n.jpg', 0, 'attachment', 'image/jpeg', 0),
-(30, 1, '2015-09-01 08:33:11', '2015-09-01 08:33:11', '', 'Skills', '', 'publish', 'closed', 'closed', '', 'skills', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost:8080/somrat_dot_me/?p=30', 3, 'nav_menu_item', '', 0),
-(31, 1, '2015-09-01 08:33:11', '2015-09-01 08:33:11', '', 'Blog', '', 'publish', 'closed', 'closed', '', 'blog', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost:8080/somrat_dot_me/?p=31', 4, 'nav_menu_item', '', 0),
-(32, 1, '2015-09-01 08:33:12', '2015-09-01 08:33:12', '', 'Contact', '', 'publish', 'closed', 'closed', '', 'contact', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost:8080/somrat_dot_me/?p=32', 5, 'nav_menu_item', '', 0),
-(33, 1, '2015-09-01 08:33:12', '2015-09-01 08:33:12', '', 'Gallery', '', 'publish', 'closed', 'closed', '', 'gallery', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost:8080/somrat_dot_me/?p=33', 6, 'nav_menu_item', '', 0),
-(34, 1, '2015-09-01 08:33:12', '2015-09-01 08:33:12', '', 'Facebook', '', 'publish', 'closed', 'closed', '', 'facebook', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost:8080/somrat_dot_me/?p=34', 7, 'nav_menu_item', '', 0),
-(35, 1, '2015-09-01 08:33:12', '2015-09-01 08:33:12', '', 'Twitter', '', 'publish', 'closed', 'closed', '', 'twitter', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost:8080/somrat_dot_me/?p=35', 8, 'nav_menu_item', '', 0),
-(36, 1, '2015-09-01 08:33:12', '2015-09-01 08:33:12', '', 'Linkedin', '', 'publish', 'closed', 'closed', '', 'linkdin', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost:8080/somrat_dot_me/?p=36', 9, 'nav_menu_item', '', 0),
-(38, 1, '2015-09-01 15:43:46', '0000-00-00 00:00:00', '', 'fa fa-github', '', 'draft', 'closed', 'closed', '', '', '', '', '2015-09-01 15:43:46', '0000-00-00 00:00:00', '', 0, 'http://localhost:8080/somrat_dot_me/?p=38', 1, 'nav_menu_item', '', 0),
-(39, 1, '2015-09-01 15:44:41', '2015-09-01 15:44:41', '', 'Github', '', 'publish', 'closed', 'closed', '', 'github', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost:8080/somrat_dot_me/?p=39', 10, 'nav_menu_item', '', 0),
-(40, 1, '2015-09-02 04:05:25', '2015-09-02 04:05:25', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\r\n\r\n<a href="http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/09.jpg"><img class="alignnone size-medium wp-image-19" src="http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/09-300x135.jpg" alt="09" width="300" height="135" /></a>', 'About Me', '', 'inherit', 'closed', 'closed', '', '10-revision-v1', '', '', '2015-09-02 04:05:25', '2015-09-02 04:05:25', '', 10, 'http://localhost:8080/somrat_dot_me/10-revision-v1/', 0, 'revision', '', 0),
-(41, 1, '2015-09-02 04:06:34', '2015-09-02 04:06:34', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\r\n\r\n<img class="alignnone wp-image-19 size-medium" src="http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/08/09-300x135.jpg" alt="09" width="300" height="135" />', 'About Me', '', 'inherit', 'closed', 'closed', '', '10-revision-v1', '', '', '2015-09-02 04:06:34', '2015-09-02 04:06:34', '', 10, 'http://localhost:8080/somrat_dot_me/10-revision-v1/', 0, 'revision', '', 0),
-(42, 1, '2015-09-02 04:22:20', '0000-00-00 00:00:00', '', 'Auto Draft', '', 'auto-draft', 'closed', 'closed', '', '', '', '', '2015-09-02 04:22:20', '0000-00-00 00:00:00', '', 0, 'http://localhost:8080/somrat_dot_me/?post_type=portfolio&p=42', 0, 'portfolio', '', 0),
-(43, 1, '2015-09-02 04:37:18', '2015-09-02 04:37:18', 'm Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Portfolio 3', 'ng, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pa', 'publish', 'closed', 'closed', '', 'portfolio-3', '', '', '2015-09-02 07:30:30', '2015-09-02 07:30:30', '', 0, 'http://localhost:8080/somrat_dot_me/?post_type=portfolio&#038;p=43', 3, 'portfolio', '', 0),
-(44, 1, '2015-09-02 04:39:37', '2015-09-02 04:39:37', 'ng, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pang, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pang, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pa', 'portfolio 4', 'ng, remaining essentially unchanged. It was popularised in the 1960s withng Lorem Ipsum pa', 'publish', 'closed', 'closed', '', 'portfolio-4', '', '', '2015-09-02 07:31:01', '2015-09-02 07:31:01', '', 0, 'http://localhost:8080/somrat_dot_me/?post_type=portfolio&#038;p=44', 4, 'portfolio', '', 0),
-(45, 1, '2015-09-02 04:40:54', '2015-09-02 04:40:54', 'ng, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pang, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pang, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pa', 'portfolio 5', 'ng, remaining essentis popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pa', 'publish', 'closed', 'closed', '', 'portfolio-5', '', '', '2015-09-02 07:31:17', '2015-09-02 07:31:17', '', 0, 'http://localhost:8080/somrat_dot_me/?post_type=portfolio&#038;p=45', 5, 'portfolio', '', 0),
-(46, 1, '2015-09-02 07:23:30', '2015-09-02 07:23:30', 'm Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Portfolio 6', 'lly unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more ', 'publish', 'closed', 'closed', '', 'portfolio-6', '', '', '2015-09-02 07:24:54', '2015-09-02 07:24:54', '', 0, 'http://localhost:8080/somrat_dot_me/?post_type=portfolio&#038;p=46', 6, 'portfolio', '', 0),
-(47, 1, '2015-09-02 07:23:24', '2015-09-02 07:23:24', '', '05', '', 'inherit', 'open', 'closed', '', '05-2', '', '', '2015-09-02 07:23:24', '2015-09-02 07:23:24', '', 46, 'http://localhost:8080/somrat_dot_me/wp-content/uploads/2015/09/05.jpg', 0, 'attachment', 'image/jpeg', 0),
-(48, 1, '2015-09-02 07:30:08', '2015-09-02 07:30:08', 'm Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Portfolio 3', 'ng, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pa', 'inherit', 'closed', 'closed', '', '43-autosave-v1', '', '', '2015-09-02 07:30:08', '2015-09-02 07:30:08', '', 43, 'http://localhost:8080/somrat_dot_me/43-autosave-v1/', 0, 'revision', '', 0),
-(49, 1, '2015-09-02 10:02:40', '2015-09-02 10:02:40', ' ', '', '', 'publish', 'closed', 'closed', '', '49', '', '', '2015-09-02 10:06:51', '2015-09-02 10:06:51', '', 0, 'http://localhost:8080/somrat_dot_me/?p=49', 1, 'nav_menu_item', '', 0),
-(50, 1, '2015-09-02 10:02:40', '2015-09-02 10:02:40', ' ', '', '', 'publish', 'closed', 'closed', '', '50', '', '', '2015-09-02 10:06:51', '2015-09-02 10:06:51', '', 0, 'http://localhost:8080/somrat_dot_me/?p=50', 2, 'nav_menu_item', '', 0),
-(51, 1, '2015-09-02 10:02:40', '2015-09-02 10:02:40', '', 'Skills', '', 'publish', 'closed', 'closed', '', 'skills-2', '', '', '2015-09-02 10:06:51', '2015-09-02 10:06:51', '', 0, 'http://localhost:8080/somrat_dot_me/?p=51', 3, 'nav_menu_item', '', 0),
-(52, 1, '2015-09-02 10:02:40', '2015-09-02 10:02:40', '', 'Contact', '', 'publish', 'closed', 'closed', '', 'contact-2', '', '', '2015-09-02 10:06:51', '2015-09-02 10:06:51', '', 0, 'http://localhost:8080/somrat_dot_me/?p=52', 4, 'nav_menu_item', '', 0),
-(53, 1, '2015-09-02 10:02:40', '2015-09-02 10:02:40', '', 'Gallery', '', 'publish', 'closed', 'closed', '', 'gallery-2', '', '', '2015-09-02 10:06:51', '2015-09-02 10:06:51', '', 0, 'http://localhost:8080/somrat_dot_me/?p=53', 5, 'nav_menu_item', '', 0),
-(54, 1, '2015-09-02 10:02:41', '2015-09-02 10:02:41', '', 'Blog', '', 'publish', 'closed', 'closed', '', 'blog-2', '', '', '2015-09-02 10:06:51', '2015-09-02 10:06:51', '', 0, 'http://localhost:8080/somrat_dot_me/?p=54', 6, 'nav_menu_item', '', 0);
+(1, 1, '2015-08-30 06:44:28', '2015-08-30 06:44:28', 'Welcome to WordPress. This is your first post. Edit or delete it, then start writing!', 'Hello world!', '', 'publish', 'open', 'open', '', 'hello-world', '', '', '2015-08-30 10:11:46', '2015-08-30 10:11:46', '', 0, 'http://localhost/somrat_dot_me/?p=1', 0, 'post', '', 1),
+(2, 1, '2015-08-30 06:44:28', '2015-08-30 06:44:28', 'This is an example page. It''s different from a blog post because it will stay in one place and will show up in your site navigation (in most themes). Most people start with an About page that introduces them to potential site visitors. It might say something like this:\n\n<blockquote>Hi there! I''m a bike messenger by day, aspiring actor by night, and this is my website. I live in Los Angeles, have a great dog named Jack, and I like pi&#241;a coladas. (And gettin'' caught in the rain.)</blockquote>\n\n...or something like this:\n\n<blockquote>The XYZ Doohickey Company was founded in 1971, and has been providing quality doohickeys to the public ever since. Located in Gotham City, XYZ employs over 2,000 people and does all kinds of awesome things for the Gotham community.</blockquote>\n\nAs a new WordPress user, you should go to <a href="http://localhost/somrat_dot_me/wp-admin/">your dashboard</a> to delete this page and create new pages for your content. Have fun!', 'Sample Page', '', 'publish', 'open', 'open', '', 'sample-page', '', '', '2015-08-30 06:44:28', '2015-08-30 06:44:28', '', 0, 'http://localhost/somrat_dot_me/?page_id=2', 0, 'page', '', 0),
+(3, 1, '2015-08-30 06:44:43', '0000-00-00 00:00:00', '', 'Auto Draft', '', 'auto-draft', 'open', 'open', '', '', '', '', '2015-08-30 06:44:43', '0000-00-00 00:00:00', '', 0, 'http://localhost/somrat_dot_me/?p=3', 0, 'post', '', 0),
+(4, 1, '2015-08-30 08:54:17', '2015-08-30 08:54:17', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Test Post 1', '', 'publish', 'open', 'open', '', 'test-post-1', '', '', '2015-08-30 10:11:40', '2015-08-30 10:11:40', '', 0, 'http://localhost/somrat_dot_me/?p=4', 0, 'post', '', 0),
+(5, 1, '2015-08-30 08:54:17', '2015-08-30 08:54:17', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Test Post 1', '', 'inherit', 'closed', 'closed', '', '4-revision-v1', '', '', '2015-08-30 08:54:17', '2015-08-30 08:54:17', '', 4, 'http://localhost/somrat_dot_me/4-revision-v1/', 0, 'revision', '', 0),
+(6, 1, '2015-08-30 08:54:46', '2015-08-30 08:54:46', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Test post 2', '', 'publish', 'open', 'open', '', 'test-post-2', '', '', '2015-08-30 10:11:28', '2015-08-30 10:11:28', '', 0, 'http://localhost/somrat_dot_me/?p=6', 0, 'post', '', 0),
+(7, 1, '2015-08-30 08:54:46', '2015-08-30 08:54:46', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Test post 2', '', 'inherit', 'closed', 'closed', '', '6-revision-v1', '', '', '2015-08-30 08:54:46', '2015-08-30 08:54:46', '', 6, 'http://localhost/somrat_dot_me/6-revision-v1/', 0, 'revision', '', 0),
+(8, 1, '2015-08-30 10:11:46', '2015-08-30 10:11:46', 'Welcome to WordPress. This is your first post. Edit or delete it, then start writing!', 'Hello world!', '', 'inherit', 'closed', 'closed', '', '1-revision-v1', '', '', '2015-08-30 10:11:46', '2015-08-30 10:11:46', '', 1, 'http://localhost/somrat_dot_me/1-revision-v1/', 0, 'revision', '', 0),
+(9, 1, '2015-08-30 10:11:50', '0000-00-00 00:00:00', '', 'Auto Draft', '', 'auto-draft', 'open', 'open', '', '', '', '', '2015-08-30 10:11:50', '0000-00-00 00:00:00', '', 0, 'http://localhost/somrat_dot_me/?p=9', 0, 'post', '', 0),
+(10, 1, '2015-08-30 12:04:02', '2015-08-30 12:04:02', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\r\n\r\n<img class="alignnone wp-image-19 size-medium" src="http://localhost/somrat_dot_me/wp-content/uploads/2015/08/09-300x135.jpg" alt="09" width="300" height="135" />', 'About Me', '', 'publish', 'closed', 'closed', '', 'about-me', '', '', '2015-09-02 04:06:34', '2015-09-02 04:06:34', '', 0, 'http://localhost/somrat_dot_me/?page_id=10', 0, 'page', '', 0),
+(11, 1, '2015-08-30 12:04:02', '2015-08-30 12:04:02', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'About Me', '', 'inherit', 'closed', 'closed', '', '10-revision-v1', '', '', '2015-08-30 12:04:02', '2015-08-30 12:04:02', '', 10, 'http://localhost/somrat_dot_me/10-revision-v1/', 0, 'revision', '', 0),
+(12, 1, '2015-08-30 12:05:10', '2015-08-30 12:05:10', ' ', '', '', 'publish', 'closed', 'closed', '', '12', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost/somrat_dot_me/?p=12', 1, 'nav_menu_item', '', 0),
+(14, 1, '2015-08-30 12:05:11', '2015-08-30 12:05:11', ' ', '', '', 'publish', 'closed', 'closed', '', '14', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost/somrat_dot_me/?p=14', 2, 'nav_menu_item', '', 0),
+(15, 1, '2015-08-31 06:13:40', '2015-08-31 06:13:40', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Portfolio 1', 'is simply dummy text of the printing and typesetting industry.', 'publish', 'closed', 'closed', '', 'portfolio-1', '', '', '2015-08-31 06:36:45', '2015-08-31 06:36:45', '', 0, 'http://localhost/somrat_dot_me/?post_type=portfolio&#038;p=15', 1, 'portfolio', '', 0),
+(16, 1, '2015-08-31 06:13:08', '2015-08-31 06:13:08', '', 'photodune-1523200-butterfly-m-920x780', '', 'inherit', 'open', 'closed', '', 'photodune-1523200-butterfly-m-920x780', '', '', '2015-08-31 06:13:08', '2015-08-31 06:13:08', '', 15, 'http://localhost/somrat_dot_me/wp-content/uploads/2015/08/photodune-1523200-butterfly-m-920x780.jpg', 0, 'attachment', 'image/jpeg', 0),
+(17, 1, '2015-08-31 06:34:28', '2015-08-31 06:34:28', '', '05', '', 'inherit', 'open', 'closed', '', '05', '', '', '2015-08-31 06:34:28', '2015-08-31 06:34:28', '', 15, 'http://localhost/somrat_dot_me/wp-content/uploads/2015/08/05.jpg', 0, 'attachment', 'image/jpeg', 0),
+(18, 1, '2015-08-31 06:34:29', '2015-08-31 06:34:29', '', '06', '', 'inherit', 'open', 'closed', '', '06', '', '', '2015-08-31 06:34:29', '2015-08-31 06:34:29', '', 15, 'http://localhost/somrat_dot_me/wp-content/uploads/2015/08/06.jpg', 0, 'attachment', 'image/jpeg', 0),
+(19, 1, '2015-08-31 06:34:29', '2015-08-31 06:34:29', '', '09', '', 'inherit', 'open', 'closed', '', '09', '', '', '2015-08-31 06:34:29', '2015-08-31 06:34:29', '', 15, 'http://localhost/somrat_dot_me/wp-content/uploads/2015/08/09.jpg', 0, 'attachment', 'image/jpeg', 0),
+(20, 1, '2015-08-31 06:38:44', '2015-08-31 06:38:44', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining esum.', 'Portfolio 2', ' It has survived not only five', 'publish', 'closed', 'closed', '', 'portfolio-2', '', '', '2015-09-02 15:52:33', '2015-09-02 15:52:33', '', 0, 'http://localhost/somrat_dot_me/?post_type=portfolio&#038;p=20', 2, 'portfolio', '', 0),
+(21, 1, '2015-08-31 07:30:37', '0000-00-00 00:00:00', '', 'Auto Draft', '', 'auto-draft', 'closed', 'closed', '', '', '', '', '2015-08-31 07:30:37', '0000-00-00 00:00:00', '', 0, 'http://localhost/somrat_dot_me/?post_type=portfolio&p=21', 0, 'portfolio', '', 0),
+(22, 1, '2015-08-31 11:38:41', '0000-00-00 00:00:00', '', 'Auto Draft', '', 'auto-draft', 'closed', 'closed', '', '', '', '', '2015-08-31 11:38:41', '0000-00-00 00:00:00', '', 0, 'http://localhost/somrat_dot_me/?page_id=22', 0, 'page', '', 0),
+(23, 1, '2015-08-31 11:41:44', '2015-08-31 11:41:44', '', 'Media', '', 'private', 'closed', 'closed', '', 'media', '', '', '2015-08-31 11:41:44', '2015-08-31 11:41:44', '', 0, 'http://localhost/somrat_dot_me/?option-tree=media', 0, 'option-tree', '', 0),
+(24, 1, '2015-09-01 03:18:00', '2015-09-01 03:18:00', '', 'angular-js-images-10', '', 'inherit', 'open', 'closed', '', 'angular-js-images-10', '', '', '2015-09-01 03:18:00', '2015-09-01 03:18:00', '', 23, 'http://localhost/somrat_dot_me/wp-content/uploads/2015/08/angular-js-images-10.jpg', 0, 'attachment', 'image/jpeg', 0),
+(27, 1, '2015-09-01 03:18:02', '2015-09-01 03:18:02', '', 'jquery', '', 'inherit', 'open', 'closed', '', 'jquery', '', '', '2015-09-01 03:18:02', '2015-09-01 03:18:02', '', 23, 'http://localhost/somrat_dot_me/wp-content/uploads/2015/08/jquery.png', 0, 'attachment', 'image/png', 0),
+(28, 1, '2015-09-01 03:18:04', '2015-09-01 03:18:04', '', 'Wordpress-Splash-Image', '', 'inherit', 'open', 'closed', '', 'wordpress-splash-image', '', '', '2015-09-01 03:18:04', '2015-09-01 03:18:04', '', 23, 'http://localhost/somrat_dot_me/wp-content/uploads/2015/08/Wordpress-Splash-Image.png', 0, 'attachment', 'image/png', 0),
+(29, 1, '2015-09-01 05:41:54', '2015-09-01 05:41:54', '', '522698_3806913229644_1672316026_n', '', 'inherit', 'open', 'closed', '', '522698_3806913229644_1672316026_n', '', '', '2015-09-01 05:41:54', '2015-09-01 05:41:54', '', 23, 'http://localhost/somrat_dot_me/wp-content/uploads/2015/08/522698_3806913229644_1672316026_n.jpg', 0, 'attachment', 'image/jpeg', 0),
+(30, 1, '2015-09-01 08:33:11', '2015-09-01 08:33:11', '', 'Skills', '', 'publish', 'closed', 'closed', '', 'skills', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost/somrat_dot_me/?p=30', 3, 'nav_menu_item', '', 0),
+(31, 1, '2015-09-01 08:33:11', '2015-09-01 08:33:11', '', 'Blog', '', 'publish', 'closed', 'closed', '', 'blog', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost/somrat_dot_me/?p=31', 4, 'nav_menu_item', '', 0),
+(32, 1, '2015-09-01 08:33:12', '2015-09-01 08:33:12', '', 'Contact', '', 'publish', 'closed', 'closed', '', 'contact', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost/somrat_dot_me/?p=32', 5, 'nav_menu_item', '', 0),
+(33, 1, '2015-09-01 08:33:12', '2015-09-01 08:33:12', '', 'Gallery', '', 'publish', 'closed', 'closed', '', 'gallery', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost/somrat_dot_me/?p=33', 6, 'nav_menu_item', '', 0),
+(34, 1, '2015-09-01 08:33:12', '2015-09-01 08:33:12', '', 'Facebook', '', 'publish', 'closed', 'closed', '', 'facebook', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost/somrat_dot_me/?p=34', 7, 'nav_menu_item', '', 0),
+(35, 1, '2015-09-01 08:33:12', '2015-09-01 08:33:12', '', 'Twitter', '', 'publish', 'closed', 'closed', '', 'twitter', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost/somrat_dot_me/?p=35', 8, 'nav_menu_item', '', 0),
+(36, 1, '2015-09-01 08:33:12', '2015-09-01 08:33:12', '', 'Linkedin', '', 'publish', 'closed', 'closed', '', 'linkdin', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost/somrat_dot_me/?p=36', 9, 'nav_menu_item', '', 0),
+(38, 1, '2015-09-01 15:43:46', '0000-00-00 00:00:00', '', 'fa fa-github', '', 'draft', 'closed', 'closed', '', '', '', '', '2015-09-01 15:43:46', '0000-00-00 00:00:00', '', 0, 'http://localhost/somrat_dot_me/?p=38', 1, 'nav_menu_item', '', 0),
+(39, 1, '2015-09-01 15:44:41', '2015-09-01 15:44:41', '', 'Github', '', 'publish', 'closed', 'closed', '', 'github', '', '', '2015-09-02 09:58:45', '2015-09-02 09:58:45', '', 0, 'http://localhost/somrat_dot_me/?p=39', 10, 'nav_menu_item', '', 0),
+(40, 1, '2015-09-02 04:05:25', '2015-09-02 04:05:25', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\r\n\r\n<a href="http://localhost/somrat_dot_me/wp-content/uploads/2015/08/09.jpg"><img class="alignnone size-medium wp-image-19" src="http://localhost/somrat_dot_me/wp-content/uploads/2015/08/09-300x135.jpg" alt="09" width="300" height="135" /></a>', 'About Me', '', 'inherit', 'closed', 'closed', '', '10-revision-v1', '', '', '2015-09-02 04:05:25', '2015-09-02 04:05:25', '', 10, 'http://localhost/somrat_dot_me/10-revision-v1/', 0, 'revision', '', 0),
+(41, 1, '2015-09-02 04:06:34', '2015-09-02 04:06:34', '<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\r\n\r\n<img class="alignnone wp-image-19 size-medium" src="http://localhost/somrat_dot_me/wp-content/uploads/2015/08/09-300x135.jpg" alt="09" width="300" height="135" />', 'About Me', '', 'inherit', 'closed', 'closed', '', '10-revision-v1', '', '', '2015-09-02 04:06:34', '2015-09-02 04:06:34', '', 10, 'http://localhost/somrat_dot_me/10-revision-v1/', 0, 'revision', '', 0),
+(42, 1, '2015-09-02 04:22:20', '0000-00-00 00:00:00', '', 'Auto Draft', '', 'auto-draft', 'closed', 'closed', '', '', '', '', '2015-09-02 04:22:20', '0000-00-00 00:00:00', '', 0, 'http://localhost/somrat_dot_me/?post_type=portfolio&p=42', 0, 'portfolio', '', 0),
+(43, 1, '2015-09-02 04:37:18', '2015-09-02 04:37:18', 'm Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Portfolio 3', 'ng, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pa', 'publish', 'closed', 'closed', '', 'portfolio-3', '', '', '2015-09-02 15:52:45', '2015-09-02 15:52:45', '', 0, 'http://localhost/somrat_dot_me/?post_type=portfolio&#038;p=43', 3, 'portfolio', '', 0),
+(44, 1, '2015-09-02 04:39:37', '2015-09-02 04:39:37', 'ng, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pang, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pang, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pa', 'portfolio 4', 'ng, remaining essentially unchanged. It was popularised in the 1960s withng Lorem Ipsum pa', 'publish', 'closed', 'closed', '', 'portfolio-4', '', '', '2015-09-02 15:52:57', '2015-09-02 15:52:57', '', 0, 'http://localhost/somrat_dot_me/?post_type=portfolio&#038;p=44', 4, 'portfolio', '', 0),
+(45, 1, '2015-09-02 04:40:54', '2015-09-02 04:40:54', 'ng, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pang, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pang, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pa', 'portfolio 5', 'ng, remaining essentis popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pa', 'publish', 'closed', 'closed', '', 'portfolio-5', '', '', '2015-09-02 15:53:10', '2015-09-02 15:53:10', '', 0, 'http://localhost/somrat_dot_me/?post_type=portfolio&#038;p=45', 5, 'portfolio', '', 0),
+(46, 1, '2015-09-02 07:23:30', '2015-09-02 07:23:30', 'm Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Portfolio 6', 'lly unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more ', 'publish', 'closed', 'closed', '', 'portfolio-6', '', '', '2015-09-02 15:53:22', '2015-09-02 15:53:22', '', 0, 'http://localhost/somrat_dot_me/?post_type=portfolio&#038;p=46', 6, 'portfolio', '', 0),
+(47, 1, '2015-09-02 07:23:24', '2015-09-02 07:23:24', '', '05', '', 'inherit', 'open', 'closed', '', '05-2', '', '', '2015-09-02 07:23:24', '2015-09-02 07:23:24', '', 46, 'http://localhost/somrat_dot_me/wp-content/uploads/2015/09/05.jpg', 0, 'attachment', 'image/jpeg', 0),
+(48, 1, '2015-09-02 07:30:08', '2015-09-02 07:30:08', 'm Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Portfolio 3', 'ng, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum pa', 'inherit', 'closed', 'closed', '', '43-autosave-v1', '', '', '2015-09-02 07:30:08', '2015-09-02 07:30:08', '', 43, 'http://localhost/somrat_dot_me/43-autosave-v1/', 0, 'revision', '', 0),
+(49, 1, '2015-09-02 10:02:40', '2015-09-02 10:02:40', ' ', '', '', 'publish', 'closed', 'closed', '', '49', '', '', '2015-09-02 10:06:51', '2015-09-02 10:06:51', '', 0, 'http://localhost/somrat_dot_me/?p=49', 1, 'nav_menu_item', '', 0),
+(50, 1, '2015-09-02 10:02:40', '2015-09-02 10:02:40', ' ', '', '', 'publish', 'closed', 'closed', '', '50', '', '', '2015-09-02 10:06:51', '2015-09-02 10:06:51', '', 0, 'http://localhost/somrat_dot_me/?p=50', 2, 'nav_menu_item', '', 0),
+(51, 1, '2015-09-02 10:02:40', '2015-09-02 10:02:40', '', 'Skills', '', 'publish', 'closed', 'closed', '', 'skills-2', '', '', '2015-09-02 10:06:51', '2015-09-02 10:06:51', '', 0, 'http://localhost/somrat_dot_me/?p=51', 3, 'nav_menu_item', '', 0),
+(52, 1, '2015-09-02 10:02:40', '2015-09-02 10:02:40', '', 'Contact', '', 'publish', 'closed', 'closed', '', 'contact-2', '', '', '2015-09-02 10:06:51', '2015-09-02 10:06:51', '', 0, 'http://localhost/somrat_dot_me/?p=52', 4, 'nav_menu_item', '', 0),
+(53, 1, '2015-09-02 10:02:40', '2015-09-02 10:02:40', '', 'Gallery', '', 'publish', 'closed', 'closed', '', 'gallery-2', '', '', '2015-09-02 10:06:51', '2015-09-02 10:06:51', '', 0, 'http://localhost/somrat_dot_me/?p=53', 5, 'nav_menu_item', '', 0),
+(54, 1, '2015-09-02 10:02:41', '2015-09-02 10:02:41', '', 'Blog', '', 'publish', 'closed', 'closed', '', 'blog-2', '', '', '2015-09-02 10:06:51', '2015-09-02 10:06:51', '', 0, 'http://localhost/somrat_dot_me/?p=54', 6, 'nav_menu_item', '', 0),
+(55, 1, '2015-09-02 16:27:42', '2015-09-02 16:27:42', 'n book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lore', 'Portfolio 7', 'summaries of your content that c', 'publish', 'closed', 'closed', '', 'portfolio-7', '', '', '2015-09-02 16:27:42', '2015-09-02 16:27:42', '', 0, 'http://localhost/somrat_dot_me/?post_type=portfolio&#038;p=55', 7, 'portfolio', '', 0);
 
 -- --------------------------------------------------------
 
@@ -567,11 +591,14 @@ INSERT INTO `sdm_posts` (`ID`, `post_author`, `post_date`, `post_date_gmt`, `pos
 --
 
 CREATE TABLE IF NOT EXISTS `sdm_terms` (
-`term_id` bigint(20) unsigned NOT NULL,
+  `term_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `slug` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `term_group` bigint(10) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `term_group` bigint(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`term_id`),
+  KEY `slug` (`slug`(191)),
+  KEY `name` (`name`(191))
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=13 ;
 
 --
 -- Dumping data for table `sdm_terms`
@@ -600,7 +627,9 @@ INSERT INTO `sdm_terms` (`term_id`, `name`, `slug`, `term_group`) VALUES
 CREATE TABLE IF NOT EXISTS `sdm_term_relationships` (
   `object_id` bigint(20) unsigned NOT NULL DEFAULT '0',
   `term_taxonomy_id` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `term_order` int(11) NOT NULL DEFAULT '0'
+  `term_order` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`object_id`,`term_taxonomy_id`),
+  KEY `term_taxonomy_id` (`term_taxonomy_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -651,7 +680,11 @@ INSERT INTO `sdm_term_relationships` (`object_id`, `term_taxonomy_id`, `term_ord
 (51, 12, 0),
 (52, 12, 0),
 (53, 12, 0),
-(54, 12, 0);
+(54, 12, 0),
+(55, 2, 0),
+(55, 4, 0),
+(55, 6, 0),
+(55, 7, 0);
 
 -- --------------------------------------------------------
 
@@ -660,13 +693,16 @@ INSERT INTO `sdm_term_relationships` (`object_id`, `term_taxonomy_id`, `term_ord
 --
 
 CREATE TABLE IF NOT EXISTS `sdm_term_taxonomy` (
-`term_taxonomy_id` bigint(20) unsigned NOT NULL,
+  `term_taxonomy_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `term_id` bigint(20) unsigned NOT NULL DEFAULT '0',
   `taxonomy` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `parent` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `count` bigint(20) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `count` bigint(20) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`term_taxonomy_id`),
+  UNIQUE KEY `term_id_taxonomy` (`term_id`,`taxonomy`),
+  KEY `taxonomy` (`taxonomy`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=13 ;
 
 --
 -- Dumping data for table `sdm_term_taxonomy`
@@ -674,12 +710,12 @@ CREATE TABLE IF NOT EXISTS `sdm_term_taxonomy` (
 
 INSERT INTO `sdm_term_taxonomy` (`term_taxonomy_id`, `term_id`, `taxonomy`, `description`, `parent`, `count`) VALUES
 (1, 1, 'category', '', 0, 0),
-(2, 2, 'category', '', 0, 9),
+(2, 2, 'category', '', 0, 10),
 (3, 3, 'nav_menu', '', 0, 10),
-(4, 4, 'post_tag', '', 0, 1),
+(4, 4, 'post_tag', '', 0, 2),
 (5, 5, 'post_tag', '', 0, 2),
-(6, 6, 'post_tag', '', 0, 4),
-(7, 7, 'post_tag', '', 0, 2),
+(6, 6, 'post_tag', '', 0, 5),
+(7, 7, 'post_tag', '', 0, 3),
 (8, 8, 'post_tag', '', 0, 4),
 (9, 9, 'post_tag', '', 0, 1),
 (10, 10, 'post_tag', '', 0, 4),
@@ -693,11 +729,14 @@ INSERT INTO `sdm_term_taxonomy` (`term_taxonomy_id`, `term_id`, `taxonomy`, `des
 --
 
 CREATE TABLE IF NOT EXISTS `sdm_usermeta` (
-`umeta_id` bigint(20) unsigned NOT NULL,
+  `umeta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
   `meta_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `meta_value` longtext COLLATE utf8mb4_unicode_ci
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `meta_value` longtext COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`umeta_id`),
+  KEY `user_id` (`user_id`),
+  KEY `meta_key` (`meta_key`(191))
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=26 ;
 
 --
 -- Dumping data for table `sdm_usermeta`
@@ -718,7 +757,7 @@ INSERT INTO `sdm_usermeta` (`umeta_id`, `user_id`, `meta_key`, `meta_value`) VAL
 (12, 1, 'dismissed_wp_pointers', ''),
 (13, 1, 'show_welcome_panel', '1'),
 (15, 1, 'sdm_dashboard_quick_press_last_post_id', '3'),
-(16, 1, 'session_tokens', 'a:4:{s:64:"3e902b8c80005ce1393a49b46aec56b359d409382131b09088810b2af3eeb451";a:4:{s:10:"expiration";i:1441254125;s:2:"ip";s:3:"::1";s:2:"ua";s:110:"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36";s:5:"login";i:1441081325;}s:64:"d13e358c1f74be55d58b97f1b586c97cc6b12053d087d0c04cc80d8dcb9c6e62";a:4:{s:10:"expiration";i:1441274586;s:2:"ip";s:3:"::1";s:2:"ua";s:73:"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0";s:5:"login";i:1441101786;}s:64:"e60ba423dae020307be153477325e2c9f7eb0f8d40bbf47fac3294d728b3867e";a:4:{s:10:"expiration";i:1441286882;s:2:"ip";s:3:"::1";s:2:"ua";s:102:"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36";s:5:"login";i:1441114082;}s:64:"c17ae40106e3e59e71f46fa2f0f198ac4079d0bcfb5eb81502690c89faedd056";a:4:{s:10:"expiration";i:1442374381;s:2:"ip";s:3:"::1";s:2:"ua";s:110:"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36";s:5:"login";i:1441164781;}}'),
+(16, 1, 'session_tokens', 'a:5:{s:64:"3e902b8c80005ce1393a49b46aec56b359d409382131b09088810b2af3eeb451";a:4:{s:10:"expiration";i:1441254125;s:2:"ip";s:3:"::1";s:2:"ua";s:110:"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36";s:5:"login";i:1441081325;}s:64:"d13e358c1f74be55d58b97f1b586c97cc6b12053d087d0c04cc80d8dcb9c6e62";a:4:{s:10:"expiration";i:1441274586;s:2:"ip";s:3:"::1";s:2:"ua";s:73:"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0";s:5:"login";i:1441101786;}s:64:"e60ba423dae020307be153477325e2c9f7eb0f8d40bbf47fac3294d728b3867e";a:4:{s:10:"expiration";i:1441286882;s:2:"ip";s:3:"::1";s:2:"ua";s:102:"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36";s:5:"login";i:1441114082;}s:64:"c17ae40106e3e59e71f46fa2f0f198ac4079d0bcfb5eb81502690c89faedd056";a:4:{s:10:"expiration";i:1442374381;s:2:"ip";s:3:"::1";s:2:"ua";s:110:"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36";s:5:"login";i:1441164781;}s:64:"06d97aec7d67ce51021f8a4c141365de5a491d0f7ff92274bbff6abae24f1679";a:4:{s:10:"expiration";i:1441375322;s:2:"ip";s:3:"::1";s:2:"ua";s:102:"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36";s:5:"login";i:1441202522;}}'),
 (17, 1, 'closedpostboxes_post', 'a:0:{}'),
 (18, 1, 'metaboxhidden_post', 'a:5:{i:0;s:13:"trackbacksdiv";i:1;s:10:"postcustom";i:2;s:16:"commentstatusdiv";i:3;s:7:"slugdiv";i:4;s:9:"authordiv";}'),
 (19, 1, 'managenav-menuscolumnshidden', 'a:0:{}'),
@@ -736,7 +775,7 @@ INSERT INTO `sdm_usermeta` (`umeta_id`, `user_id`, `meta_key`, `meta_value`) VAL
 --
 
 CREATE TABLE IF NOT EXISTS `sdm_users` (
-`ID` bigint(20) unsigned NOT NULL,
+  `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_login` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `user_pass` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `user_nicename` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
@@ -745,8 +784,11 @@ CREATE TABLE IF NOT EXISTS `sdm_users` (
   `user_registered` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `user_activation_key` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `user_status` int(11) NOT NULL DEFAULT '0',
-  `display_name` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `display_name` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (`ID`),
+  KEY `user_login_key` (`user_login`),
+  KEY `user_nicename` (`user_nicename`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `sdm_users`
@@ -755,130 +797,6 @@ CREATE TABLE IF NOT EXISTS `sdm_users` (
 INSERT INTO `sdm_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`) VALUES
 (1, 'somratexel', '$P$BiMpLm6FnWGWxiaz6.46TZBSfXp0r11', 'somratexel', 'somratexelgm@gmail.com', '', '2015-08-30 06:44:28', '', 0, 'somratexel');
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `sdm_commentmeta`
---
-ALTER TABLE `sdm_commentmeta`
- ADD PRIMARY KEY (`meta_id`), ADD KEY `comment_id` (`comment_id`), ADD KEY `meta_key` (`meta_key`(191));
-
---
--- Indexes for table `sdm_comments`
---
-ALTER TABLE `sdm_comments`
- ADD PRIMARY KEY (`comment_ID`), ADD KEY `comment_post_ID` (`comment_post_ID`), ADD KEY `comment_approved_date_gmt` (`comment_approved`,`comment_date_gmt`), ADD KEY `comment_date_gmt` (`comment_date_gmt`), ADD KEY `comment_parent` (`comment_parent`), ADD KEY `comment_author_email` (`comment_author_email`(10));
-
---
--- Indexes for table `sdm_links`
---
-ALTER TABLE `sdm_links`
- ADD PRIMARY KEY (`link_id`), ADD KEY `link_visible` (`link_visible`);
-
---
--- Indexes for table `sdm_options`
---
-ALTER TABLE `sdm_options`
- ADD PRIMARY KEY (`option_id`), ADD UNIQUE KEY `option_name` (`option_name`);
-
---
--- Indexes for table `sdm_postmeta`
---
-ALTER TABLE `sdm_postmeta`
- ADD PRIMARY KEY (`meta_id`), ADD KEY `post_id` (`post_id`), ADD KEY `meta_key` (`meta_key`(191));
-
---
--- Indexes for table `sdm_posts`
---
-ALTER TABLE `sdm_posts`
- ADD PRIMARY KEY (`ID`), ADD KEY `post_name` (`post_name`(191)), ADD KEY `type_status_date` (`post_type`,`post_status`,`post_date`,`ID`), ADD KEY `post_parent` (`post_parent`), ADD KEY `post_author` (`post_author`);
-
---
--- Indexes for table `sdm_terms`
---
-ALTER TABLE `sdm_terms`
- ADD PRIMARY KEY (`term_id`), ADD KEY `slug` (`slug`(191)), ADD KEY `name` (`name`(191));
-
---
--- Indexes for table `sdm_term_relationships`
---
-ALTER TABLE `sdm_term_relationships`
- ADD PRIMARY KEY (`object_id`,`term_taxonomy_id`), ADD KEY `term_taxonomy_id` (`term_taxonomy_id`);
-
---
--- Indexes for table `sdm_term_taxonomy`
---
-ALTER TABLE `sdm_term_taxonomy`
- ADD PRIMARY KEY (`term_taxonomy_id`), ADD UNIQUE KEY `term_id_taxonomy` (`term_id`,`taxonomy`), ADD KEY `taxonomy` (`taxonomy`);
-
---
--- Indexes for table `sdm_usermeta`
---
-ALTER TABLE `sdm_usermeta`
- ADD PRIMARY KEY (`umeta_id`), ADD KEY `user_id` (`user_id`), ADD KEY `meta_key` (`meta_key`(191));
-
---
--- Indexes for table `sdm_users`
---
-ALTER TABLE `sdm_users`
- ADD PRIMARY KEY (`ID`), ADD KEY `user_login_key` (`user_login`), ADD KEY `user_nicename` (`user_nicename`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `sdm_commentmeta`
---
-ALTER TABLE `sdm_commentmeta`
-MODIFY `meta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `sdm_comments`
---
-ALTER TABLE `sdm_comments`
-MODIFY `comment_ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `sdm_links`
---
-ALTER TABLE `sdm_links`
-MODIFY `link_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `sdm_options`
---
-ALTER TABLE `sdm_options`
-MODIFY `option_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=301;
---
--- AUTO_INCREMENT for table `sdm_postmeta`
---
-ALTER TABLE `sdm_postmeta`
-MODIFY `meta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=246;
---
--- AUTO_INCREMENT for table `sdm_posts`
---
-ALTER TABLE `sdm_posts`
-MODIFY `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=55;
---
--- AUTO_INCREMENT for table `sdm_terms`
---
-ALTER TABLE `sdm_terms`
-MODIFY `term_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
---
--- AUTO_INCREMENT for table `sdm_term_taxonomy`
---
-ALTER TABLE `sdm_term_taxonomy`
-MODIFY `term_taxonomy_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
---
--- AUTO_INCREMENT for table `sdm_usermeta`
---
-ALTER TABLE `sdm_usermeta`
-MODIFY `umeta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
---
--- AUTO_INCREMENT for table `sdm_users`
---
-ALTER TABLE `sdm_users`
-MODIFY `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

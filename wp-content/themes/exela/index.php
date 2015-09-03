@@ -36,10 +36,10 @@ get_header(); ?>
 						</a>
 					</div>
 					<div class="col-md-4 wow fadeInRight">
-						<h1 class="site-title"><?php bloginfo('name'); ?></h1>
+						<h1 class="site-title"><a href="<?php echo site_url(); ?>"><?php bloginfo('name'); ?></a></h1>
 						<p><?php bloginfo('description'); ?></p>
 					</div>
-					<div class="col-md-6 wow bounce">
+					<div class="col-md-6 wow fadeInDown">
 						<div class="top-search-container">
 							<input placeholder="Search in site" class="top-search" type="text" name="s">
 							<button class="search-btn" type="submit"><i class="fa fa-search">&nbsp;</i></button>

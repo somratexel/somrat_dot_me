@@ -30,9 +30,12 @@ app.controller('mainCtrl', function($scope, $http, $routeParams, dataService,$lo
 	$scope.topMenu = '';
 
 	$scope.currentLocation = {
-		url: $location.absUrl()
+		url: $location.absUrl()+'/'
 	}
 
+	$scope.cssLoader = {
+		show: true
+	}
 
 	/*var exelaMainMenu = localStorage.getItem('exelaMainMenu');
 	if(exelaMainMenu && exelaMainMenu.length>0){
@@ -47,12 +50,14 @@ app.controller('mainCtrl', function($scope, $http, $routeParams, dataService,$lo
 
 	$scope.mainmenu = dataService.mainmenu(function(data){
 		$scope.mainmenu =  data;
-		setStorage('exelaMainMenu', JSON.stringify($scope.mainmenu));  
+		setStorage('exelaMainMenu', JSON.stringify($scope.mainmenu));
+		$scope.cssLoader.show = false;  
 	});
 
 	$scope.topMenu = dataService.topmenu(function(data){
 		$scope.topMenu =  data;
-		setStorage('exelaTopMenu', JSON.stringify($scope.topMenu));  
+		setStorage('exelaTopMenu', JSON.stringify($scope.topMenu));
+		$scope.cssLoader.show = false;  
 	});
 	
 
@@ -60,11 +65,8 @@ app.controller('mainCtrl', function($scope, $http, $routeParams, dataService,$lo
 
 app.controller('homeCtrl', function($scope, $http, $routeParams,$location) {
 	$scope.page.title = 'Home';
-
-	$http.get('wp-json/posts/').success(function(res){
-		$scope.posts = res;
-	});
-
+	$scope.currentLocation.url = $location.absUrl()+'/';
+	$scope.cssLoader.show = false; 
 
 	/*$http.get(myLocalized.ajaxurl+'?action=get-theme-option-data').success(function(res){
 		console.log(res)
@@ -74,23 +76,49 @@ app.controller('homeCtrl', function($scope, $http, $routeParams,$location) {
 
 app.controller('pageCtrl', function($scope, $http, $routeParams,$location) {
 	$scope.pageData = {};
+	$scope.currentLocation.url = $location.absUrl()+'/';
+	$scope.cssLoader.show = true; 
 	$http.get('wp-json/pages/' + $routeParams.slug).success(function(res, status, headers){
 		$scope.page.title = res.title;
 		$scope.pageData.title = res.title;
 		$scope.pageData.content = res.content;
+		$scope.cssLoader.show = false;
 	});
 	
 });
 
 app.controller('portfolioCtrl', function($scope, $http, $routeParams,$filter,$location) {
 	$scope.page.title = 'Portfolio';
-
+	$scope.currentLocation.url = $location.absUrl()+'/';
+	$scope.cssLoader.show = true; 
 	$scope.portfolioList = [];
 	$scope.offset = 0;
 	$scope.posts_per_page = 6;
 	$http.get('wp-json/posts?type[]=portfolio&filter[posts_per_page]='+$scope.posts_per_page+'&filter[orderby]=menu_order&filter[order]=ASC&filter[offset]='+$scope.offset).success(function(res, status, headers){
 		$scope.portfolioList =  $filter("toArray")(res);
+		$scope.cssLoader.show = false;
+		//console.log($scope.portfolioList);
 	});
+
+	var whenScrlBottom = function() {
+    
+	    var win_h = (self.innerHeight) ? self.innerHeight : document.body.clientHeight;    // gets window height
+	    var scrl_pos = window.pageYOffset ? window.pageYOffset : document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;
+	    
+	    if (document.body.scrollHeight <= (scrl_pos + win_h)) {
+	       	$scope.cssLoader.show = true;
+	       	$scope.offset = $scope.offset+$scope.posts_per_page;
+	       	$http.get('wp-json/posts?type[]=portfolio&filter[posts_per_page]='+$scope.posts_per_page+'&filter[orderby]=menu_order&filter[order]=ASC&filter[offset]='+$scope.offset).success(function(res, status, headers){
+				var newRes =  $filter("toArray")(res);
+				newRes.forEach(function(item){
+					$scope.portfolioList.push(item);
+				});
+				$scope.cssLoader.show = false;
+			});
+		}
+	}
+	
+	window.onscroll = whenScrlBottom;
 	
 });
 
