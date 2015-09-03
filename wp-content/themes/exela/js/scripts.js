@@ -87,38 +87,51 @@ app.controller('pageCtrl', function($scope, $http, $routeParams,$location) {
 	
 });
 
-app.controller('portfolioCtrl', function($scope, $http, $routeParams,$filter,$location) {
+app.controller('portfolioCtrl', function($scope, $http, $routeParams,$filter,$location,$window) {
 	$scope.page.title = 'Portfolio';
 	$scope.currentLocation.url = $location.absUrl()+'/';
 	$scope.cssLoader.show = true; 
 	$scope.portfolioList = [];
 	$scope.offset = 0;
 	$scope.posts_per_page = 6;
+	$scope.callLoadMore = true;
 	$http.get('wp-json/posts?type[]=portfolio&filter[posts_per_page]='+$scope.posts_per_page+'&filter[orderby]=menu_order&filter[order]=ASC&filter[offset]='+$scope.offset).success(function(res, status, headers){
 		$scope.portfolioList =  $filter("toArray")(res);
 		$scope.cssLoader.show = false;
 		//console.log($scope.portfolioList);
 	});
 
-	var whenScrlBottom = function() {
-    
-	    var win_h = (self.innerHeight) ? self.innerHeight : document.body.clientHeight;    // gets window height
-	    var scrl_pos = window.pageYOffset ? window.pageYOffset : document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;
-	    
-	    if (document.body.scrollHeight <= (scrl_pos + win_h)) {
-	       	$scope.cssLoader.show = true;
+	$scope.loadMore = function(){
+		if($scope.callLoadMore){
+			$scope.cssLoader.show = true;
 	       	$scope.offset = $scope.offset+$scope.posts_per_page;
 	       	$http.get('wp-json/posts?type[]=portfolio&filter[posts_per_page]='+$scope.posts_per_page+'&filter[orderby]=menu_order&filter[order]=ASC&filter[offset]='+$scope.offset).success(function(res, status, headers){
 				var newRes =  $filter("toArray")(res);
-				newRes.forEach(function(item){
-					$scope.portfolioList.push(item);
-				});
+				if(newRes.length > 0){
+					newRes.forEach(function(item){
+						$scope.portfolioList.push(item);
+					});
+				}else{
+					$scope.callLoadMore = false;
+					$scope.offset = $scope.offset-$scope.posts_per_page;
+				}
+				
 				$scope.cssLoader.show = false;
 			});
+		}	
+	}
+
+	var whenScrlBottom = function() {
+    
+	    var win_h = (self.innerHeight) ? self.innerHeight : document.body.clientHeight;    // gets window height
+	    var scrl_pos = $window.pageYOffset ? $window.pageYOffset : document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;
+	    
+	    if (document.body.scrollHeight <= (scrl_pos + win_h)) {
+	       	jQuery('#load-more-portfolio').click();
 		}
 	}
 	
-	window.onscroll = whenScrlBottom;
+	$window.onscroll = whenScrlBottom;
 	
 });
 
