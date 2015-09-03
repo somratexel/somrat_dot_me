@@ -33,11 +33,6 @@ app.controller('mainCtrl', function($scope, $http, $routeParams, dataService,$lo
 		url: $location.absUrl()
 	}
 
-	$scope.set_active = function(index){
-		//$scope.currentLocation.url = $location.absUrl();
-		console.log($location.absUrl())
-	}
-
 
 	/*var exelaMainMenu = localStorage.getItem('exelaMainMenu');
 	if(exelaMainMenu && exelaMainMenu.length>0){
@@ -79,7 +74,6 @@ app.controller('homeCtrl', function($scope, $http, $routeParams,$location) {
 
 app.controller('pageCtrl', function($scope, $http, $routeParams,$location) {
 	$scope.pageData = {};
-
 	$http.get('wp-json/pages/' + $routeParams.slug).success(function(res, status, headers){
 		$scope.page.title = res.title;
 		$scope.pageData.title = res.title;

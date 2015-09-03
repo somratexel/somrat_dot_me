@@ -47,7 +47,7 @@ get_header(); ?>
 						<div class="top-navigation-container">
 							<ul class="top-manu-list">
 								<li class="top-menu-item" ng-repeat="item in topMenu">
-									<a ng-click="set_active($index)"  ng-class="{active: currentLocation.url==item.url}" class="top-menu-link" title="{{item.title}}" ng-href="{{item.url}}">
+									<a ng-class="{active: currentLocation.url==item.url}" class="top-menu-link" title="{{item.title}}" ng-href="{{item.url}}">
 										<i ng-class="item.classes">&nbsp;</i>
 									</a>
 								</li>
