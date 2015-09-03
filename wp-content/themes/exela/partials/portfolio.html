@@ -1,17 +1,31 @@
 <div class="row">
 	<div class="col-md-12">
 		<h2 class="page-title">{{page.title}}</h2>
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="list-inline text-right">
+					<li class="tag-item">
+						<a class="tag-item-link" href="" ng-click="filterItem.$ = ''">All</a>
+					</li>
+					<li class="tag-item" ng-repeat="item in tagList">
+						<a class="tag-item-link" href="" ng-click="filterItem.$=item.slug">{{item.name}}</a>
+					</li>
+				</ul>
+			</div>
+		</div>
 		<div class="row portfolio-list">
-			<div ng-repeat="item in portfolioList" class="col-md-4 portfolio-item no-padding-right wow fadeInUp">
+			<div ng-repeat="item in portfolioList | filter:filterItem" class="col-md-4 portfolio-item no-padding-right wow fadeInUp">
 				<div class="folio-wraper">
-					<a href="">
+					<a class="folio-link" href="">
+						<span class="tag-span">
+							<small ng-repeat="tag in item.terms.post_tag">
+								{{tag.name}}
+							</small>
+						</span>
 						<img class="img-responsive portfolio-img" height="300px" width="100%" ng-src="{{item.featured_image.attachment_meta.sizes.medium.url}}">
 						<h4 class="portfolio-title">{{item.title}}</h4>
 					</a>
 				</div>
-				<!-- <div class="folio-hover">
-					<h4 class="portfolio-title">{{item.excerpt}}</h4>
-				</div> -->	
 			</div>
 		</div>
 		<div class="row text-center hidden">

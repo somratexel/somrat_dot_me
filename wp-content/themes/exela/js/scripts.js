@@ -92,13 +92,20 @@ app.controller('portfolioCtrl', function($scope, $http, $routeParams,$filter,$lo
 	$scope.currentLocation.url = $location.absUrl()+'/';
 	$scope.cssLoader.show = true; 
 	$scope.portfolioList = [];
+	$scope.tagList = [];
 	$scope.offset = 0;
 	$scope.posts_per_page = 6;
 	$scope.callLoadMore = true;
+	$scope.filterItem = {};
+
 	$http.get('wp-json/posts?type[]=portfolio&filter[posts_per_page]='+$scope.posts_per_page+'&filter[orderby]=menu_order&filter[order]=ASC&filter[offset]='+$scope.offset).success(function(res, status, headers){
 		$scope.portfolioList =  $filter("toArray")(res);
 		$scope.cssLoader.show = false;
 		//console.log($scope.portfolioList);
+	});
+
+	$http.get('wp-json/taxonomies/post_tag/terms').success(function(res, status, headers){
+		$scope.tagList =  $filter("toArray")(res);
 	});
 
 	$scope.loadMore = function(){
