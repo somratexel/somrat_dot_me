@@ -98,8 +98,8 @@ a:focus, a:hover{
     font-size: 20px;
     width: 50px;
     text-align: center;
-    background-color: #3F6E9B;
-    color: #fff;
+    background-color: rgba(255,255,255,0.5);
+    color: #ABACAC;
 }
 .top-navigation-container{
 	float: right;
@@ -205,6 +205,19 @@ a:focus, a:hover{
 	position: absolute;
 	bottom: 0;
 }
+.folio-info{
+    position: absolute;
+    z-index: 99;
+    color: #f9f9f9;
+    top: 35%;
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    opacity: 0.0;
+}
+.folio-info i{
+  font-size: 30px;
+}
 .folio-link:hover > .portfolio-title{
     bottom:-100px;
     /*webkit-transition: bottom 0.5s ease;
@@ -220,6 +233,15 @@ a:focus, a:hover{
 }
 .folio-link:hover > .tag-span {
     opacity: 0.0;
+    /*top: -100px;*/
+    -webkit-transition: all 500ms ease-in-out;
+    -moz-transition: all 500ms ease-in-out;
+    -ms-transition: all 500ms ease-in-out;
+    -o-transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out;
+}
+.folio-link:hover > .folio-info {
+    opacity: 0.7;
     /*top: -100px;*/
     -webkit-transition: all 500ms ease-in-out;
     -moz-transition: all 500ms ease-in-out;
@@ -252,6 +274,9 @@ a:focus, a:hover{
   margin-bottom: 2px;
   float: left;
 }
+
+.tag-item .selected{
+  color: #f9f9f9;
 }
 /*portfolio ends*/
 

@@ -2,13 +2,13 @@
 	<div class="col-md-12">
 		<h2 class="page-title">{{page.title}}</h2>
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-12 wow fadeInDown" data-wow-duration="3s">
 				<ul class="list-inline text-right">
 					<li class="tag-item">
-						<a class="tag-item-link" href="" ng-click="filterItem.$ = ''">All</a>
+						<a ng-class="{selected: filterItem.$==''}" class="tag-item-link" href="" ng-click="filterItem.$ = ''">All</a>
 					</li>
 					<li class="tag-item" ng-repeat="item in tagList">
-						<a class="tag-item-link" href="" ng-click="filterItem.$=item.slug">{{item.name}}</a>
+						<a ng-class="{selected: filterItem.$==item.slug}" class="tag-item-link" href="" ng-click="filterItem.$=item.slug">{{item.name}}</a>
 					</li>
 				</ul>
 			</div>
@@ -24,6 +24,10 @@
 						</span>
 						<img class="img-responsive portfolio-img" height="300px" width="100%" ng-src="{{item.featured_image.attachment_meta.sizes.medium.url}}">
 						<h4 class="portfolio-title">{{item.title}}</h4>
+						<span class="folio-info">
+							<i class="fa fa-eye">&nbsp;</i> <br />
+							Click To Vew Details
+						</span>
 					</a>
 				</div>
 			</div>
