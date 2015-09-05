@@ -16,7 +16,7 @@
 		<div class="row portfolio-list">
 			<div ng-repeat="item in portfolioList | filter:filterItem" class="col-md-4 portfolio-item no-padding-right wow fadeInUp">
 				<div class="folio-wraper">
-					<a class="folio-link" href="">
+					<a class="folio-link" href="{{item.link}}">
 						<span class="tag-span">
 							<small ng-repeat="tag in item.terms.post_tag">
 								{{tag.name}}

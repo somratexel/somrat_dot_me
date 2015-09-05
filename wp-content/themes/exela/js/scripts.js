@@ -12,6 +12,10 @@ app.config(function($routeProvider, $locationProvider) {
 		templateUrl: myLocalized.partials + 'portfolio.html',
 		controller: 'portfolioCtrl'
 	})
+	.when('/portfolio/:slug', {
+		templateUrl: myLocalized.partials + 'single-portfolio.html',
+		controller: 'singlePortfolioCtrl'
+	})
 	.when('/:slug', {
 		templateUrl: myLocalized.partials + 'page.html',
 		controller: 'pageCtrl'
@@ -142,23 +146,22 @@ app.controller('portfolioCtrl', function($scope, $http, $routeParams,$filter,$lo
 	
 });
 
-//searchForm Directive
-app.directive('searchForm', function() {
-	return {
-		restrict: 'EA',
-		template: 'Search Keyword: <input type="text" name="s" ng-model="filter.s" ng-change="search()">',
-		controller: ['$scope', '$http', function ( $scope, $http ) {
-			$scope.filter = {
-				s: ''
-			};
-			$scope.search = function() {
-				$http.get('wp-json/posts/?filter[s]=' + $scope.filter.s).success(function(res){
-					$scope.posts = res;
-				});
-			};
-		}]
-	};
+app.controller('singlePortfolioCtrl', function($scope, $http, $routeParams,$filter,$location,$window) {
+	
+	$scope.cssLoader.show = true; 
+	$scope.portfolioData = [];
+	$http.get('wp-json/posts?type[]=portfolio&filter[name]='+$routeParams.slug).success(function(res, status, headers){
+		$scope.portfolioData =  $filter("toArray")(res);
+		$scope.currentLocation.url = $scope.portfolioData[0].terms.category[0].link;
+		$scope.page.title = $scope.portfolioData[0].title;
+		$scope.cssLoader.show = false;
+		console.log($scope.portfolioData);
+	});
+
+	
 });
+
+
 
 app.service('dataService', function($http) {
 	this.mainmenu=function(callback){
@@ -191,5 +194,42 @@ app.filter("toArray", function(){
           result.push(val);
       });
       return result;
+  };
+});
+
+//searchForm Directive
+app.directive('searchForm', function() {
+	return {
+		restrict: 'EA',
+		template: 'Search Keyword: <input type="text" name="s" ng-model="filter.s" ng-change="search()">',
+		controller: ['$scope', '$http', function ( $scope, $http ) {
+			$scope.filter = {
+				s: ''
+			};
+			$scope.search = function() {
+				$http.get('wp-json/posts/?filter[s]=' + $scope.filter.s).success(function(res){
+					$scope.posts = res;
+				});
+			};
+		}]
+	};
+});
+
+app.directive('fancybox', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, element) {
+      if (scope.$last) setTimeout(function() {
+       jQuery('.fancybox').fancybox({
+          //theme : 'dark',
+          /*openEffect  : 'elastic',
+          closeEffect : 'elastic',
+          nextEffect  : 'elastic',
+          prevEffect  : 'elastic',
+          loop: true,*/
+          padding: 0
+        });
+       }, 1);
+    }
   };
 });

@@ -1,0 +1,30 @@
+<div class="row">
+	<div class="col-md-12">
+		<h2 class="page-title">{{page.title}}</h2>
+		<div class="row">
+			<div class="col-md-6 folio-data-content">
+				<a class="folio-live-link" target="_blank" href="{{portfolioData[0].portfolio_meta_data.exela_portfolio_meta_url}}">Click To View In Live</a>
+				<ul class="list-inline folio-tag-items">
+					<li ng-repeat="item in portfolioData[0].terms.post_tag">
+						<span class="folio-tag-name">{{item.name}}</span>
+					</li>
+				</ul>
+				<div ng-bind-html="portfolioData[0].content"></div>
+			</div>
+			<div class="col-md-6">
+				<div class="row folio-gallery">
+					<div class="col-md-6 folio-gallery-item no-padding-right" ng-repeat="(folioKey,imgSrc) in portfolioData[0].portfolio_meta_data.exela_portfolio_meta_images">
+						<a target="_self" fancybox data-fancybox-group="gallery" class="fancybox folio-single-box" ng-href="{{imgSrc}}">
+							<img height="auto" width="100%" class="img-responsive" ng-src="{{imgSrc}}">
+							<span class="folio-img-hover">
+								<i class="fa fa-arrows-alt">&nbsp;</i>
+								<br />
+								Click For Large View
+							</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

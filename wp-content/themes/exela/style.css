@@ -278,7 +278,56 @@ a:focus, a:hover{
 .tag-item .selected{
   color: #f9f9f9;
 }
+
 /*portfolio ends*/
+
+/*portfolio single starts*/
+.folio-data-content{
+  text-align: right;
+}
+.folio-live-link{
+  font-size: 24px;
+}
+.folio-tag-items{
+
+}
+.folio-tag-items li{
+    background-color: rgba(255,255,255,0.5);
+    margin-left: 5px;
+    padding: 2px 10px;
+    margin-bottom: 5px;
+}
+.folio-tag-name{
+
+}
+.folio-single-box:hover > .folio-img-hover {
+    opacity: 0.9;
+    -webkit-transition: all 500ms ease-in-out;
+    -moz-transition: all 500ms ease-in-out;
+    -ms-transition: all 500ms ease-in-out;
+    -o-transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out;
+}
+.folio-img-hover{
+    opacity: 0.0;
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    text-align: center;
+    color: #f9f9f9;
+}
+.folio-img-hover i{
+  font-size: 24px;
+}
+.folio-gallery-item{
+  height: 230px;
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+.folio-gallery .no-padding-right:nth-child(2n){
+  padding-right:15px;
+}
+/*portfolio single ends*/
 
 /*loader animation starts*/
 .sk-cube-grid {
