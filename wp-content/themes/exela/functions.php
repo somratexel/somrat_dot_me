@@ -195,6 +195,66 @@ add_filter( 'json_prepare_post', function ($data, $post, $context) {
 return $data;
 }, 10, 3 );
 
+/**
+ * Adding portfolio meta data in json api
+ */
+add_filter( 'json_prepare_post', function ($data, $post, $context) {
+
+	$data['post_navigation'] = array(
+		    'previous_post_link' => get_previous_post_slug( $post['ID'] ),
+		    'next_post_link'	 => get_next_post_slug( $post['ID'] )
+	);
+return $data;
+}, 10, 3 );
+
+function get_previous_post_slug( $post_id ) {
+    // Get a global post reference since get_adjacent_post() references it
+    global $post;
+
+    // Store the existing post object for later so we don't lose it
+    $oldGlobal = $post;
+
+    // Get the post object for the specified post and place it in the global variable
+    $post = get_post( $post_id );
+
+    // Get the post object for the previous post
+    $previous_post = get_previous_post();
+
+    $postSlug = esc_url( get_permalink($previous_post->ID) );
+
+    // Reset our global object
+    $post = $oldGlobal;
+
+    if ( '' == $previous_post ) 
+        return '';
+
+    return $postSlug;
+}
+
+function get_next_post_slug( $post_id ) {
+    // Get a global post reference since get_adjacent_post() references it
+    global $post;
+
+    // Store the existing post object for later so we don't lose it
+    $oldGlobal = $post;
+
+    // Get the post object for the specified post and place it in the global variable
+    $post = get_post( $post_id );
+
+    // Get the post object for the previous post
+    $next_post = get_next_post();
+    $postSlug = esc_url( get_permalink($next_post->ID) );
+
+    // Reset our global object
+    $post = $oldGlobal;
+
+    if ( '' == $next_post ) 
+        return '';
+
+    return $postSlug;
+}
+
+
 /*add_action( 'wp_ajax_nopriv_get-theme-option-data', 'get_theme_option_data' );
 add_action( 'wp_ajax_get-theme-option-data', 'get_theme_option_data' );
 
@@ -235,3 +295,33 @@ endif;
 * Hide admin bar from front end
 **/
 show_admin_bar( false );
+
+
+/**
+* Adding skills shortcode
+**/
+add_shortcode('exela_skills', 'exela_skills_view');
+
+function exela_skills_view(){
+	$output = '';
+	$args = array(
+					'post_type'=> 'skill',
+					'order'    => 'ASC',
+					'order_by' => 'menu_order',
+					'posts_per_page' => -1
+				);
+	$the_query = new WP_Query( $args );
+
+	if ( $the_query->have_posts() ) :
+		$output .= '<ul>';
+		while ( $the_query->have_posts() ) : $the_query->the_post();
+			$output .= '<li>' . get_the_title(). '</li>';
+		endwhile;
+		$output .= '</ul>';
+		wp_reset_postdata();
+	else:
+		$output = '';
+	endif;	
+
+	return $output;
+}
