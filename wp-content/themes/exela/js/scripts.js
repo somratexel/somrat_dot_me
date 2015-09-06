@@ -78,14 +78,14 @@ app.controller('homeCtrl', function($scope, $http, $routeParams,$location) {
 
 });
 
-app.controller('pageCtrl', function($scope, $http, $routeParams,$location) {
+app.controller('pageCtrl', function($scope, $sce, $http, $routeParams,$location) {
 	$scope.pageData = {};
 	$scope.currentLocation.url = $location.absUrl()+'/';
 	$scope.cssLoader.show = true; 
 	$http.get('wp-json/pages/' + $routeParams.slug).success(function(res, status, headers){
 		$scope.page.title = res.title;
 		$scope.pageData.title = res.title;
-		$scope.pageData.content = res.content;
+		$scope.pageData.content = $sce.trustAsHtml(res.content);
 		$scope.cssLoader.show = false;
 	});
 	

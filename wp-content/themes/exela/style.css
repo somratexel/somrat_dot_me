@@ -1,4 +1,4 @@
-/*
+
 Theme Name: Exela
 Theme URI: http://somrat.me
 Author: Somratexel
@@ -386,6 +386,55 @@ a:hover {
 }
 /*portfolio single ends*/
 
+/*skills starts*/
+.skills-container{
+  height: 300px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.skill-percent{
+  position: relative;
+  height: 100%;
+  text-align: center;
+  
+}
+.skill-bar-container{
+  position: relative;
+  height: 100%;
+  background-color: rgba(255,255,255,0.2);
+  overflow: hidden;
+}
+.skill-bar{
+  position: absolute;
+  bottom: 0;
+  width: 75%;
+  width: 100%;
+  border-bottom: 2px solid #333;
+  opacity: 0.8;
+  -webkit-transition: all 500ms ease-in-out;
+  -moz-transition: all 500ms ease-in-out;
+  -ms-transition: all 500ms ease-in-out;
+  -o-transition: all 500ms ease-in-out;
+  transition: all 500ms ease-in-out;
+}
+.skill-bar:hover{
+  opacity: 1;
+  -webkit-transition: all 500ms ease-in-out;
+  -moz-transition: all 500ms ease-in-out;
+  -ms-transition: all 500ms ease-in-out;
+  -o-transition: all 500ms ease-in-out;
+  transition: all 500ms ease-in-out;
+}
+.skill-bar small{
+  font-size: 11px;
+  color: #fff;
+  background-color: rgba(0,0,0,0.5);
+  width: 100%;
+  float: left;
+}
+/*skills ends*/
+
 /*loader animation starts*/
 .sk-cube-grid {
   width: 40px;
@@ -448,4 +497,4 @@ a:hover {
             transform: scale3D(0, 0, 1);
   } 
 }
-/*loader animation ends*/
+/*loader animation ends

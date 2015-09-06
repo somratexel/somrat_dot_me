@@ -144,11 +144,18 @@
 
 		$cmb_skill_fields->add_field( array(
 			'name'        => __('Skill Percentage', 'cmb2'),
-			'id'          => $cmb_skill . 'meta_images',
+			'id'          => $cmb_skill . 'meta_percentage',
 			'type'        => 'text_small',
 			'attributes'  => array('type' => 'number','min' => 1, 'max' => 100),
 			'after_field' => '%',
 			'default'	  => '1'
+		));
+
+		$cmb_skill_fields->add_field( array(
+			'name'        => __('Skill Percentage Color', 'cmb2'),
+			'id'          => $cmb_skill . 'meta_percentage_color',
+			'type'        => 'colorpicker',
+			'default'	  => '#6277b2'
 		));
 
 	}

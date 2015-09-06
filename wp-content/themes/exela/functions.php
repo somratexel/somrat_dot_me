@@ -129,6 +129,7 @@ function starter_scripts() {
 	wp_enqueue_style( 'exela-style', get_template_directory_uri() . '/style.css', array(), '1.0.0' );
 	//adding js files
 	wp_enqueue_script( 'bootsrtap-script', get_template_directory_uri() . '/node_modules/bootstrap/dist/js/bootstrap.min.js', array( 'jquery' ), '3.3.5', true );
+	//wp_enqueue_script( 'bootsrtap-progress-bar', get_template_directory_uri() . '/node_modules/bootstrap-progress-bar/bootstrap-progressbar.min.js', array( 'jquery' ), '3.3.5', true );
 	wp_enqueue_script( 'slick-script', get_template_directory_uri() . '/node_modules/slick/slick.min.js', array( 'jquery' ), '1.5.7', true );
 	wp_enqueue_script( 'wow-script', get_template_directory_uri() . '/node_modules/wow/wow.min.js', array( 'jquery' ), '1.1.2', true );
 	wp_enqueue_script( 'fancybox-script', get_template_directory_uri() . '/node_modules/fancybox/jquery.fancybox.js', array( 'jquery' ), '3.0.0', true );
@@ -303,6 +304,7 @@ show_admin_bar( false );
 add_shortcode('exela_skills', 'exela_skills_view');
 
 function exela_skills_view(){
+	global $cmb_skill;
 	$output = '';
 	$args = array(
 					'post_type'=> 'skill',
@@ -311,13 +313,16 @@ function exela_skills_view(){
 					'posts_per_page' => -1
 				);
 	$the_query = new WP_Query( $args );
-
+	$counter = 2;
 	if ( $the_query->have_posts() ) :
-		$output .= '<ul>';
+		$output .= '<div class="row skills-container">';
 		while ( $the_query->have_posts() ) : $the_query->the_post();
-			$output .= '<li>' . get_the_title(). '</li>';
+			$skill_percent = get_post_meta( get_the_id(), $cmb_skill.'meta_percentage', true );
+			$skill_color = get_post_meta( get_the_id(), $cmb_skill.'meta_percentage_color', true );
+			$output .= '<div class="col-md-1 col-xs-2 col-sm-2 skill-percent no-padding-right"><div class="skill-bar-container"><div class="skill-bar wow fadeInUp" data-wow-duration="'.$counter.'s" style="height:'.$skill_percent.'%; background-color:'.$skill_color.';"><small>' . get_the_title(). '</small></div></div></div>';
+		$counter++;
 		endwhile;
-		$output .= '</ul>';
+		$output .= '</div>';
 		wp_reset_postdata();
 	else:
 		$output = '';
