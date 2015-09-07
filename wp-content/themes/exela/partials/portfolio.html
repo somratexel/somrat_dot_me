@@ -13,8 +13,8 @@
 				</ul>
 			</div>
 		</div>
-		<div class="row portfolio-list">
-			<div ng-repeat="item in portfolioList | filter:filterItem" class="col-md-4 portfolio-item no-padding-right wow fadeInUp">
+		<div class="row portfolio-list wow fadeInUp" data-wow-duration="3s">
+			<div ng-repeat="item in portfolioList | filter:filterItem" class="col-md-4 portfolio-item no-padding-right">
 				<div class="folio-wraper">
 					<a class="folio-link" href="{{item.link}}">
 						<span class="tag-span">

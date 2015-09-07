@@ -313,13 +313,13 @@ function exela_skills_view(){
 					'posts_per_page' => -1
 				);
 	$the_query = new WP_Query( $args );
-	$counter = 2;
+	$counter = 1;
 	if ( $the_query->have_posts() ) :
 		$output .= '<div class="row skills-container">';
 		while ( $the_query->have_posts() ) : $the_query->the_post();
 			$skill_percent = get_post_meta( get_the_id(), $cmb_skill.'meta_percentage', true );
 			$skill_color = get_post_meta( get_the_id(), $cmb_skill.'meta_percentage_color', true );
-			$output .= '<div class="col-md-1 col-xs-2 col-sm-2 skill-percent no-padding-right"><div class="skill-bar-container"><div class="skill-bar wow fadeInUp" data-wow-duration="'.$counter.'s" style="height:'.$skill_percent.'%; background-color:'.$skill_color.';"><small>' . get_the_title(). '</small></div></div></div>';
+			$output .= '<div class="col-md-1 col-xs-2 col-sm-2 skill-percent no-padding-right"><div class="skill-bar-container"><div class="skill-bar wow pulse" data-wow-duration="'.$counter.'s" style="height:'.$skill_percent.'%; background-color:'.$skill_color.';"><small>' . get_the_title(). '</small></div></div></div>';
 		$counter++;
 		endwhile;
 		$output .= '</div>';
