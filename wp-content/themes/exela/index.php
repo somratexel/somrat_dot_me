@@ -18,7 +18,7 @@ get_header(); ?>
 
 	
 		<div class="row">
-			<div class="col-md-12 header">
+			<div class="col-md-12 header wow bounce" data-wow-duration="2s">
 				<div class="row">
 					<div class="col-md-2 logo-container no-padding-right wow fadeInDown">
 						<a href="<?php echo site_url(); ?>">

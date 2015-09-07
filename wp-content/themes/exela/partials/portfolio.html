@@ -1,9 +1,11 @@
 <div class="row">
 	<div class="col-md-12">
-		<h2 class="page-title">{{page.title}}</h2>
 		<div class="row">
-			<div class="col-md-12 wow fadeInDown" data-wow-duration="3s">
-				<ul class="list-inline text-right">
+			<div class="col-md-3">
+				<h2 style="margin-top:0;" class="page-title">{{page.title}}</h2>
+			</div>
+			<div class="col-md-9 wow fadeInDown" data-wow-duration="3s">
+				<ul style="margin-top:5px;" class="list-inline text-right">
 					<li class="tag-item">
 						<a ng-class="{selected: filterItem.$==''}" class="tag-item-link" href="" ng-click="filterItem.$ = ''">All</a>
 					</li>

@@ -79,8 +79,10 @@ a:hover {
 	margin-bottom: 15px;
 }
 .header{
-	margin-top: 15px;
-	margin-bottom: 15px;
+	  padding-top: 15px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    background-color: rgba(0,0,0,0.1);
 }
 .logo-container{
 
@@ -144,15 +146,19 @@ a:hover {
 .copyright-container{
 	position: relative;
 	background-color: rgba(255,255,255,0.6);
-	margin-top: -14px;
+	margin-top: -15px;
 	margin-bottom: 15px;
+}
+.copyright{
+  background-color: rgba(0,0,0,0.2);
 }
 .copyright p{
 	margin: 0;
 	padding: 5px 0;
 }
 .page-title{
-  border-bottom: 1px solid #000;
+  /*border-bottom: 1px solid #000;*/
+  margin-top: 0;
 }
 
 /*home page starts*/
